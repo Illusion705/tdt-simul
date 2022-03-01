@@ -13,6 +13,13 @@ app.use("public", express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// routers
+const mainRouter = require("./routes/main");
+const apiRouter = require("./routes/api");
+
+app.use("/", mainRouter);
+app.use("/api", apiRouter);
+
 // database setup
 const port = process.env.PORT || 3001;
 const dbString = process.env.DB_STRING;
