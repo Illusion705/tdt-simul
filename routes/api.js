@@ -6,7 +6,7 @@ const User = require("../models/User");
 
 // routes
 router.get("/username_status/:username", (req, res) => {
-  User.findOne({ username: req.params.username })
+  User.findOne({ username: req.params.username.toLowerCase() })
     .then(user => {
       if (user) {
         res.json({ status: "taken" });
