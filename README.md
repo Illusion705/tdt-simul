@@ -1,5 +1,5 @@
 # TDT Simul
-#### Safe form of communication for TDT members
+#### A safe form of communication for TDT members
 
 ## Overview
 

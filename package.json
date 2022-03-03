@@ -1,11 +1,14 @@
 {
   "name": "tdt-simul",
   "version": "1.0.0",
-  "description": "",
+  "description": "A safe form of communication for TDT members",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "start": "node index",
+    "devStart": "nodemon index"
+  },
   "keywords": [],
-  "author": "",
+  "author": "Illusion705",
   "license": "ISC",
   "dependencies": {
     "ejs": "^3.1.6",
