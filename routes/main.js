@@ -32,7 +32,11 @@ router.get("/chat", (req, res) => {
   } else {
     res.redirect("/login");
   }
-})
+});
+
+router.get("/contribute", (req, res) => {
+  res.render("contribute.ejs");
+});
 
 // export router
 module.exports = router;
