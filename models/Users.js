@@ -5,6 +5,10 @@ const mongoose = require("mongoose");
 const userSchema = mongoose.Schema({
   username: String,
   displayUsername: String,
+  isAdmin: {
+    type: Boolean,
+    default: false
+  },
   dateCreated: {
     type: Date,
     default: Date.now()
@@ -12,6 +16,13 @@ const userSchema = mongoose.Schema({
   messages: {
     type: [Number],
     defualt: []
+  },
+  notifications: {
+    type: [{
+      type: String,
+      id: Number
+    }],
+    default: []
   },
   isBanned: {
     type: Boolean,
@@ -36,7 +47,7 @@ const userSchema = mongoose.Schema({
 });
 
 // create model
-const UserModel = mongoose.model("Users", userSchema);
+const Users = mongoose.model("Users", userSchema);
 
 // export model
-module.exports = UserModel;
+module.exports = Users;

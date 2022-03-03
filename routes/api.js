@@ -2,11 +2,11 @@
 const router = require("express").Router();
 
 // models
-const User = require("../models/User");
+const Users = require("../models/Users");
 
 // routes
 router.get("/username_status/:username", (req, res) => {
-  User.findOne({ username: req.params.username.toLowerCase() })
+  Users.findOne({ username: req.params.username.toLowerCase() })
     .then(user => {
       if (user) {
         res.json({ status: "taken" });
