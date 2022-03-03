@@ -6,13 +6,49 @@
 }
 
 body {
-  background: #2a2833;
+  background: #262334;
+}
+
+a {
+  text-decoration: none;
 }
 
 header {
-  background: #363442;
+  background: #333046;
   width: 100vw;
   position: fixed;
   height: 55px;
-  border-bottom: 2px solid #4a4759;
+  border-bottom: 2px solid #423d5c;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#header-logo {
+  background: #928cba;
+  border-radius: 10px 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 47px;
+  width: 130px;
+  cursor: pointer;
+  font-family: 'Lalezar', cursive;
+  font-size: 40px;
+}
+
+#header-auth-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 500px;
+}
+
+.header-link {
+  border: 2px solid #687fbb;
+  border-radius: 500px;
+  padding: 4px 7px 4px 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
