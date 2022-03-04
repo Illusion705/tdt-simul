@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const userSchema = mongoose.Schema({
   username: String,
   displayUsername: String,
+  firstName: String,
+  lastName: String,
   isAdmin: {
     type: Boolean,
     default: false
