@@ -51,5 +51,10 @@ router.get("/contribute", (req, res) => {
   res.render("contribute.ejs");
 });
 
+router.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("/");
+});
+
 // export router
 module.exports = router;

@@ -21,20 +21,26 @@ router.get("/username_status/:username", (req, res) => {
 
 router.post("/register", async (req, res) => {
   if (await verifyRegistryData(req.body.username, req.body.firstName, req.body.lastName, req.body.password)) {
-    const password = await bcrypt.hash(req.body.password, 10);
     
     const user = new User({
       username: req.body.username.toLowerCase(),
       displayUsername: req.body.username,
       firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      password: password
+      lastName: req.body.lastName
     });
 
+    await user.setPassword(req.body.password);
     await user.save();
-    res.json({ status: "success" });
+
+    await req.login(user, err => {
+      if (err) {
+        res.json({ status: "failed", reason: "internal server error" });
+      } else {
+        res.json({ status: "success" });
+      }
+    });
   } else {
-    res.json({ status: "failed" });
+    res.json({ status: "failed", reason: "invalid data" });
   }
 });
 

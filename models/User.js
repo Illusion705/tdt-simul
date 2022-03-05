@@ -1,5 +1,6 @@
 // dependencies
 const mongoose = require("mongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
 
 // schema
 const userSchema = mongoose.Schema({
@@ -48,6 +49,9 @@ const userSchema = mongoose.Schema({
     default: "pending"
   }
 });
+
+// plugins
+userSchema.plugin(passportLocalMongoose);
 
 // model
 const User = mongoose.model("Users", userSchema);
