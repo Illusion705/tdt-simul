@@ -5,8 +5,13 @@
   color: #e0e0e0;
 }
 
+main {
+  transform: translateY(55px);
+}
+
 body {
   background: #262334;
+  overflow-x: hidden;
 }
 
 a {
@@ -22,6 +27,31 @@ header {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  z-index: 20;
+}
+
+button {
+  padding: 10px;
+  font-size: 15px;
+  background: #4b57c3;
+  transition: background 500ms;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-disabled {
+  background: #4b57c3;
+  cursor: not-allowed;
+}
+
+.button-enabled {
+  background: #6774e4;
+  cursor: pointer;
+}
+
+.button-enabled:hover {
+  background: #4b57c3;
 }
 
 #header-logo {
@@ -51,4 +81,26 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#loading-circle {
+  height: 20px;
+  width: 20px;
+  background: transparent;
+  border-top: 2px solid white;
+  border-bottom: 2px solid white;
+  border-left: 2px solid transparent;
+  border-right: 2px solid transparent;
+  border-radius: 50%;
+  animation: 1s loadingButton linear infinite;
+}
+
+@keyframes loadingButton {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

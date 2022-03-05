@@ -1,0 +1,83 @@
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: calc(100vh - 55px);
+  width: 100vw;
+}
+
+#register-form-description {
+  color: #6282a8;
+  margin-bottom: 20px;
+}
+
+#register-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #423d5c;
+  background: #333046;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+#register-form-info {
+  width: 250px;
+}
+
+#register-form-info > input[type=text], #register-form-info > input[type=password] {
+  background: #262334;
+  color: #e0e0e0;
+  padding: 5px;
+  border: 1px solid #423d5c;
+  border-radius: 3px;
+  transition: background 500ms, color 500ms, box-shadow 500ms;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: 17px;
+}
+
+#register-form-info > input[type=text]:focus, #register-form-info > input[type=password]:focus {
+  background: #e0e0e0;
+  color: #262334;
+  border: 1px solid #334152;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(172, 217, 232, .25);
+}
+
+#register-form-info > label {
+  margin-bottom: 5px;
+}
+
+#register-password-label {
+  margin-top: 10px;
+}
+
+.register-warning {
+  text-align: center;
+  width: 200px;
+  color: #5b557c;
+  word-break: break-all;
+  white-space: normal;
+  margin-left: 14px;
+}
+
+#show-password-container {
+  margin-left: 10px;
+}
+
+#show-password-label {
+  font-size: 12px;
+}
+
+#show-password {
+  transform: translateY(2px);
+}
+
+#submit-register-form {
+  margin-top: 10px;
+}

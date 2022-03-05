@@ -12,7 +12,31 @@
   <header></header>
   
   <main>
+    <h1>Register</h1>
+    <h4 id="register-form-description">Enter Account Details</h4>
+    
+    <form id="register-form">
+      <div id="register-form-info">
+        <label for="register-username" id="register-username-label">Name:</label>
+        <input type="text" placeholder="Username" id="register-username" />
+        <p class="register-warning" id="register-username-warning"></p>
+        <input type="text" placeholder="First Name" id="register-first-name" />
+        <input type="text" placeholder="Last Name" id="register-last-name" />
   
+        <label for="register-password" id="register-password-label">Password:</label>
+        <input type="password" placeholder="Password" id="register-password" />
+        <p class="register-warning" id="register-password-warning"></p>
+        <input type="password" placeholder="Confirm Password" id="register-password-confirmation" />
+        <p class="register-warning" id="register-password-confirmation-warning"></p>
+        
+        <span id="show-password-container">
+          <label id="show-password-label" for="show-password">Show password: </label>
+          <input id="show-password" type="checkbox" />
+        </span>
+      </div>
+
+      <button class="button-disabled" id="submit-register-form" disabled>Register</button>
+    </form>
   </main>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
