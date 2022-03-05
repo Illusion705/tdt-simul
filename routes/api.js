@@ -1,12 +1,15 @@
 // dependencies
 const router = require("express").Router();
+const bcrypt = require("bcrypt");
+  
+const verifyRegistryData = require("../config/verify-registry-data");
 
 // models
-const Users = require("../models/Users");
+const User = require("../models/User");
 
 // routes
 router.get("/username_status/:username", (req, res) => {
-  Users.findOne({ username: req.params.username.toLowerCase() })
+  User.findOne({ username: req.params.username.toLowerCase() })
     .then(user => {
       if (user) {
         res.json({ status: "taken" });
@@ -16,8 +19,23 @@ router.get("/username_status/:username", (req, res) => {
     });
 });
 
-router.post("/register", (req, res) => {
-  
+router.post("/register", async (req, res) => {
+  if (await verifyRegistryData(req.body.username, req.body.firstName, req.body.lastName, req.body.password)) {
+    const password = await bcrypt.hash(req.body.password, 10);
+    
+    const user = new User({
+      username: req.body.username.toLowerCase(),
+      displayUsername: req.body.username,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      password: password
+    });
+
+    await user.save();
+    res.json({ status: "success" });
+  } else {
+    res.json({ status: "failed" });
+  }
 });
 
 // export router

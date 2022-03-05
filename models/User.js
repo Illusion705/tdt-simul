@@ -7,6 +7,7 @@ const userSchema = mongoose.Schema({
   displayUsername: String,
   firstName: String,
   lastName: String,
+  password: String,
   isAdmin: {
     type: Boolean,
     default: false
@@ -42,14 +43,14 @@ const userSchema = mongoose.Schema({
     type: Boolean,
     default: false
   },
-  isVerified: {
-    type: Boolean,
-    default: false
+  verificationStatus: {
+    type: String,
+    default: "pending"
   }
 });
 
-// create model
-const Users = mongoose.model("Users", userSchema);
+// model
+const User = mongoose.model("Users", userSchema);
 
 // export model
-module.exports = Users;
+module.exports = User;

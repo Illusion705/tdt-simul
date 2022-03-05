@@ -3,7 +3,7 @@ const router = require("express").Router();
 
 // routes
 router.get("/", (req, res) => {
-  if (req.user) {
+  if (req.user && req.user.verificationStatus === "verified") {
     res.redirect("/chat");
   } else {
     res.render("home.ejs");
@@ -12,7 +12,11 @@ router.get("/", (req, res) => {
 
 router.get("/register", (req, res) => {
   if (req.user) {
-    res.redirect("/chat");
+    if (req.user.verificationStatus === "verified") {
+      res.redirect("/chat");
+    } else {
+      res.redirect("/");
+    }
   } else {
     res.render("register.ejs");
   }
@@ -20,7 +24,11 @@ router.get("/register", (req, res) => {
 
 router.get("/login", (req, res) => {
   if (req.user) {
-    res.redirect("/chat");
+    if (req.user.verificationStatus === "verified") {
+      res.redirect("/chat");
+    } else {
+      res.redirect("/");
+    }
   } else {
     res.render("login.ejs");
   }
@@ -28,8 +36,13 @@ router.get("/login", (req, res) => {
 
 router.get("/chat", (req, res) => {
   if (req.user) {
-    res.render("chat.ejs");
+    if (req.user.verificationStatus === "verified") {
+      res.render("chat.ejs");
+    } else {
+      res.redirect("/");
+    }
   } else {
+    
     res.redirect("/login");
   }
 });

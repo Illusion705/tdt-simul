@@ -242,6 +242,8 @@ submitRegisterForm.click(e => {
     method: "POST",
     body: JSON.stringify({
       username: registerUsername.val(),
+      firstName: registerFirstName.val(),
+      lastName: registerLastName.val(),
       password: registerPassword.val()
     }),
     headers: {
@@ -251,7 +253,7 @@ submitRegisterForm.click(e => {
   .then(response => response.json())
   .then(response => {
     if (response.status === "success") {
-      window.location.href = "/";
+      // window.location.href = "/";
     } else {
       
     }
