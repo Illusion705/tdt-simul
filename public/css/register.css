@@ -64,6 +64,7 @@ main {
   word-break: break-all;
   white-space: normal;
   margin-left: 14px;
+  margin-bottom: 2px;
 }
 
 #show-password-container {

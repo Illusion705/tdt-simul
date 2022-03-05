@@ -14,7 +14,11 @@ router.get("/username_status/:username", (req, res) => {
         res.json({ status: "available" });
       }
     });
-})
+});
+
+router.post("/register", (req, res) => {
+  
+});
 
 // export router
 module.exports = router;
