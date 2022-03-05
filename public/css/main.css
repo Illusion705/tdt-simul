@@ -67,7 +67,7 @@ button {
   font-size: 40px;
 }
 
-#header-auth-links {
+#header-auth-links, #header-user-links {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -103,4 +103,8 @@ button {
   100% {
     transform: rotate(360deg);
   }
+}
+
+#header-auth-links, #header-user-links {
+  display: none;
 }

@@ -233,6 +233,12 @@ submitRegisterForm.click(e => {
   // prevent form auto submit
   e.preventDefault();
 
+  // disable button
+  submitRegisterForm
+    .addClass("button-disabled")
+    .removeClass("button-enabled")
+    .attr("disabled", true);
+
   // start loading animation
   const loadingAnimation = new LoadingAnimation(submitRegisterForm);
   loadingAnimation.start();
@@ -253,9 +259,9 @@ submitRegisterForm.click(e => {
   .then(response => response.json())
   .then(response => {
     if (response.status === "success") {
-      // window.location.href = "/";
+      window.location.href = "/";
     } else {
-      
+      loadingAnimation.end();
     }
   });
 });

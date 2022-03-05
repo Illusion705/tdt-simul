@@ -19,9 +19,23 @@ router.get("/username_status/:username", (req, res) => {
     });
 });
 
+router.get("/user", async (req, res) => {
+  if (req.user) {
+    res.json({
+      username: req.user.displayUsername,
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
+      isAdmin: req.user.isAdmin,
+      notificationCount: req.user.notifications.length,
+      verificationStatus: req.user.verificationStatus
+    });
+  } else {
+    res.json({ message: "no user found" });
+  }
+});
+
 router.post("/register", async (req, res) => {
   if (await verifyRegistryData(req.body.username, req.body.firstName, req.body.lastName, req.body.password)) {
-    
     const user = new User({
       username: req.body.username.toLowerCase(),
       displayUsername: req.body.username,

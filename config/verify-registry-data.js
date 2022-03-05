@@ -3,7 +3,7 @@ const User = require("../models/User");
 
 // verify registry data
 async function verifyRegistryData(username, firstName, lastName, password) {
-  const isValid = true;
+  let isValid = true;
 
   // check data exists
   if (!username || !password || !firstName || !lastName) {

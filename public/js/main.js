@@ -1,6 +1,3 @@
-// display header
-$("header").load("/public/components/header/header.html");
-
 // loading button animation
 class LoadingAnimation {
   constructor(element, size = 20) {
@@ -37,3 +34,23 @@ class LoadingAnimation {
     this.element.css("display", this.initialDisplay);
   }
 }
+
+// get user data
+fetch("/api/user")
+  .then(response => response.json())
+  .then(async user => {
+    // display header
+    $("header").load("/public/components/header/header.html", () => {
+      // DOM Elements
+      const headerAuthLinks = $("#header-auth-links");
+      const headerUserLinks = $("#header-user-links");
+
+      // setup header
+      if (user.message) {
+        headerAuthLinks.css("display", "flex");
+      } else {
+        console.log(headerUserLinks)
+        headerUserLinks.css("display", "flex");
+      }
+    });
+  });
