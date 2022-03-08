@@ -35,6 +35,42 @@ class LoadingAnimation {
   }
 }
 
+// header message
+class HeaderMessage {
+  constructor(message, color, time = null) {
+    this.message = message;
+
+    if (color === "red") {
+      this.color = "#e35b5b";
+    } else {
+      this.color = "#5be35d";
+    }
+
+    this.time = time;
+  }
+
+  display() {
+    const headerMessage = $("#header-message");
+    const headerMessageText = $("#header-message-text");
+    const headerMessageHide = $("#header-message-hide");
+    
+    headerMessageText.text(this.message);
+    headerMessage.css("background", this.color);
+    headerMessage.show();
+
+    if (this.time) {
+      this.timeout = setTimeout(() => {
+        headerMessage.hide();
+      }, this.time * 1000);
+    }
+
+    headerMessageHide.click = () => {
+      headerMessage.hide();
+      clearTimeout(this.timeout);
+    };
+  }
+}
+
 // get user data
 fetch("/api/user")
   .then(response => response.json())
@@ -44,7 +80,7 @@ fetch("/api/user")
       // DOM Elements
       const headerAuthLinks = $("#header-auth-links");
       const headerUserLinks = $("#header-user-links");
-
+      
       // setup header
       if (user.message) {
         headerAuthLinks.css("display", "flex");

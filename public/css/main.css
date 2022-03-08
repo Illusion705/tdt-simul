@@ -108,3 +108,10 @@ button {
 #header-auth-links, #header-user-links {
   display: none;
 }
+
+#header-message {
+  position: absolute;
+  transform: translateY(70px);
+  height: 50px;
+  display: none;
+}

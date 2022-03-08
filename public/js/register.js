@@ -46,11 +46,6 @@ async function verifyUsername() {
     return "no username";
   }
 
-  // check username available
-  if (!(await checkUsernameAvailable(username))) {
-    return "username taken";
-  }
-
   // check username length
   if (username.length > 20 || username.length < 3) {
     return "invalid length";
@@ -61,6 +56,11 @@ async function verifyUsername() {
     if (!"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_".includes(username[i])) {
       return "invalid character";
     }
+  }
+
+  // check username available
+  if (!(await checkUsernameAvailable(username))) {
+    return "username taken";
   }
 
   // valid username
@@ -114,14 +114,8 @@ async function dataChanged() {
 
 // check username
 registerUsername.blur(async () => {
-  console.log(await verifyUsername());
   // update register button
   updateRegisterButton();
-
-  // prevent warning for no value
-  if (!registerUsername.val()) {
-    usernameWarning.text(null);
-  }
   
   // update warning
   switch (await verifyUsername()) {
@@ -138,6 +132,11 @@ registerUsername.blur(async () => {
       usernameWarning.text(null);
       break;
   }
+
+  // prevent warning for no value
+  if (!registerUsername.val()) {
+    usernameWarning.text(null);
+  }
 });
 
 registerUsername.on("input propertychange paste", dataChanged);
@@ -147,15 +146,10 @@ registerPassword.blur(() => {
   // update register button
   updateRegisterButton();
 
-  // prevent warning for no value
-  if (!registerPassword.val()) {
-    passwordWarning.text(null);
-  }
-
   // update warning
   switch (verifyPassword()) {
     case "invalid length":
-      passwordWarning.text("password must be at least 8 character");
+      passwordWarning.text("password must be at least 8 characters");
       break;
     case "invalid password confirmation":
       if (registerPasswordConfirmation.val()) {
@@ -174,6 +168,11 @@ registerPassword.blur(() => {
         
       break;
   }
+
+  // prevent warning for no value
+  if (!registerPassword.val()) {
+    passwordWarning.text(null);
+  }
 });
 
 registerPassword.on("input propertychange paste", dataChanged);
@@ -182,11 +181,6 @@ registerPassword.on("input propertychange paste", dataChanged);
 registerPasswordConfirmation.blur(() => {
   // update register button
   updateRegisterButton();
-
-  // prevent warning for no value
-  if (!registerPasswordConfirmation.val()) {
-    passwordConfirmationWarning.text(null);
-  }
   
   // update warning
   console.log(verifyPasswordConfirmation());
@@ -208,6 +202,11 @@ registerPasswordConfirmation.blur(() => {
       }
       
       break;
+  }
+
+  // prevent warning for no value
+  if (!registerPasswordConfirmation.val()) {
+    passwordConfirmationWarning.text(null);
   }
 });
 

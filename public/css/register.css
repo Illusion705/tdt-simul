@@ -61,7 +61,7 @@ main {
   text-align: center;
   width: 200px;
   color: #5b557c;
-  word-break: break-all;
+  word-break: normal;
   white-space: normal;
   margin-left: 14px;
   margin-bottom: 2px;
