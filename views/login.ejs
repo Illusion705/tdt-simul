@@ -12,7 +12,23 @@
   <header></header>
   
   <main>
-  
+    <h1>Login</h1>
+    <h4 id="login-form-description">Login to Chat</h4>
+    
+    <form id="login-form">
+      <div id="login-form-info">
+        <label for="login-username" id="login-username-label">Account Info:</label>
+        <input type="text" placeholder="Username" id="login-username" />
+        <input type="password" placeholder="Password" id="login-password" />
+        
+        <span id="show-password-container">
+          <label id="show-password-label" for="show-password">Show password: </label>
+          <input id="show-password" type="checkbox" />
+        </span>
+      </div>
+
+      <button class="button-disabled" id="submit-login-form" disabled>Login</button>
+    </form>
   </main>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

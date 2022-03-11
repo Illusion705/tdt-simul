@@ -232,11 +232,17 @@ submitRegisterForm.click(e => {
   // prevent form auto submit
   e.preventDefault();
 
-  // disable button
+  // disable button and inputs
   submitRegisterForm
     .addClass("button-disabled")
     .removeClass("button-enabled")
     .attr("disabled", true);
+
+  registerUsername.attr("disabled", true);
+  registerFirstName.attr("disabled", true);
+  registerLastName.attr("disabled", true);
+  registerPassword.attr("disabled", true);
+  registerPasswordConfirmation.attr("disabled", true);
 
   // start loading animation
   const loadingAnimation = new LoadingAnimation(submitRegisterForm);
@@ -260,9 +266,19 @@ submitRegisterForm.click(e => {
     if (response.status === "success") {
       window.location.href = "/";
     } else {
+      // end loading animation
       loadingAnimation.end();
+
+      // display error message
       const errorMsg = new HeaderMessage("Error: Invalid login data.", "red", 2);
       errorMsg.display();
+
+      // enable inputs
+      registerUsername.attr("disabled", false);
+      registerFirstName.attr("disabled", false);
+      registerLastName.attr("disabled", false);
+      registerPassword.attr("disabled", false);
+      registerPasswordConfirmation.attr("disabled", false);
     }
   });
 });
