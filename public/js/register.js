@@ -270,8 +270,16 @@ submitRegisterForm.click(e => {
       loadingAnimation.end();
 
       // display error message
-      const errorMsg = new HeaderMessage("Error: Invalid login data.", "red", 2);
-      errorMsg.display();
+      if (response.reason === "internal server error") {
+        const errorMsg = new HeaderMessage("Error: An internal server error occurred.", "red", 2);
+        errorMsg.display();
+      } else if (response.reason === "invalid data") {
+        const errorMsg = new HeaderMessage("Error: Invalid registry data.", "red", 2);
+        errorMsg.display(); 
+      } else {
+        const errorMsg = new HeaderMessage("Error: An unknown error occurred.", "red", 2);
+        errorMsg.display();
+      }
 
       // enable inputs
       registerUsername.attr("disabled", false);

@@ -20,7 +20,7 @@ router.get("/username_status/:username", (req, res) => {
 });
 
 router.get("/user", async (req, res) => {
-  if (req.user) {
+  if (req.isAuthenticated()) {
     res.json({
       username: req.user.displayUsername,
       firstName: req.user.firstName,
@@ -46,13 +46,34 @@ router.post("/register", async (req, res) => {
     await user.setPassword(req.body.password);
     await user.save();
 
-    await req.login(user, err => {
+    req.login(user, err => {
       if (err) {
         res.json({ status: "failed", reason: "internal server error" });
       } else {
         res.json({ status: "success" });
       }
     });
+  } else {
+    res.json({ status: "failed", reason: "invalid data" });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  if (req.body.username && req.body.password) {
+    User.authenticate()(req.body.username.toLowerCase(), req.body.password)
+      .then(({ user }) => {
+        if (user) {
+          req.login(user, err => {
+            if (err) {
+              res.json({ status: "failed", reason: "internal server error" });
+            } else {
+              res.json({ status: "success" });
+            }
+          });
+        } else {
+          res.json({ status: "failed", reason: "invalid username or password" });
+        }
+      });
   } else {
     res.json({ status: "failed", reason: "invalid data" });
   }
