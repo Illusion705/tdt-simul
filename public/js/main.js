@@ -56,18 +56,30 @@ class HeaderMessage {
     
     headerMessageText.text(this.message);
     headerMessage.css("background", this.color);
-    headerMessage.show();
+    headerMessage.css("opacity", "1.0");
+    headerMessage.css("display", "flex");
 
     if (this.time) {
       this.timeout = setTimeout(() => {
-        headerMessage.hide();
+        let i = 0;
+        this.interval = setInterval(() => {
+          headerMessage.css("opacity", (1.0 - i * 0.02).toString());
+
+          if (i === 99) {
+            headerMessage.hide();
+            clearInterval(this.interval);
+          }
+
+          i++;
+        }, 1);
       }, this.time * 1000);
     }
 
-    headerMessageHide.click = () => {
+    headerMessageHide.click(() => {
       headerMessage.hide();
       clearTimeout(this.timeout);
-    };
+      clearInterval(this.interval);
+    });
   }
 }
 

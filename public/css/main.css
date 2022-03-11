@@ -55,7 +55,8 @@ button {
 }
 
 #header-logo {
-  background: #928cba;
+  /*background: #928cba;*/
+  background: linear-gradient(to bottom, 	#0057b7 0%, 	#0057b7 50%, #ffd700 50%, #ffd700 100%);
   border-radius: 10px 25px;
   display: flex;
   justify-content: center;
@@ -65,6 +66,10 @@ button {
   cursor: pointer;
   font-family: 'Lalezar', cursive;
   font-size: 40px;
+}
+
+#header-logo > span {
+  color: white;
 }
 
 #header-auth-links, #header-user-links {
@@ -112,6 +117,20 @@ button {
 #header-message {
   position: absolute;
   transform: translateY(70px);
-  height: 50px;
+  height: 40px;
   display: none;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 10px;
+}
+
+#header-message-text {
+  margin-left: 15px;
+  margin-right: 20px;
+}
+
+#header-message-hide {
+  margin-right: 15px;
+  cursor: pointer;
+  color: #bdbdbd;
 }

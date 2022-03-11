@@ -261,6 +261,8 @@ submitRegisterForm.click(e => {
       window.location.href = "/";
     } else {
       loadingAnimation.end();
+      const errorMsg = new HeaderMessage("Error: Invalid login data.", "red", 2);
+      errorMsg.display();
     }
   });
 });
