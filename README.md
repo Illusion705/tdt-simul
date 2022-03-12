@@ -1,5 +1,5 @@
 # TDT Simul
-#### A safe form of communication for TDT members
+#### A safe form of communication for TDT members to extend their etiquette skills outside of the classroom.
 
 ## Overview
 
