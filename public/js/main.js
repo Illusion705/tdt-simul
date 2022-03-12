@@ -1,3 +1,6 @@
+// global variables
+let mobileHeaderOpen = false;
+
 // loading button animation
 class LoadingAnimation {
   constructor(element, size = 20) {
@@ -84,6 +87,7 @@ class HeaderMessage {
 }
 
 // get user data
+let showUserLinks = false;
 fetch("/api/user")
   .then(response => response.json())
   .then(async user => {
@@ -92,13 +96,75 @@ fetch("/api/user")
       // DOM Elements
       const headerAuthLinks = $("#header-auth-links");
       const headerUserLinks = $("#header-user-links");
+      const headerToggle = $("#header-toggle");
+      const headerToggleBars = $(".header-toggle-bar");
+      const headerToggleClose1 = $("#header-toggle-close1");
+      const headerToggleClose2 = $("#header-toggle-close2");
       
       // setup header
-      if (user.message) {
-        headerAuthLinks.css("display", "flex");
-      } else {
-        console.log(headerUserLinks)
-        headerUserLinks.css("display", "flex");
+      if (window.innerWidth > 500) {
+        if (user.message) {
+          headerAuthLinks.css("display", "flex");
+        } else {
+          headerUserLinks.css("display", "flex");
+          showUserLinks = true;
+        }
       }
+
+      // header hamburger toggle
+      headerToggle.click(() => {
+        if (mobileHeaderOpen) {
+          mobileHeaderOpen = false;
+
+          for (bar of headerToggleBars) {
+            bar.style.display = "block";
+          }
+
+          headerToggleClose1.hide();
+          headerToggleClose2.hide();
+        } else {
+          mobileHeaderOpen = true;
+
+          for (bar of headerToggleBars) {
+            bar.style.display = "none";
+          }
+
+          headerToggleClose1.show();
+          headerToggleClose2.show();
+        }
+      });
     });
   });
+
+// header respond on window resize
+$(window).resize(() => {
+  // DOM Elements
+  const headerAuthLinks = $("#header-auth-links");
+  const headerUserLinks = $("#header-user-links");
+
+  // show/hide elements
+  if (window.innerWidth > 500) {
+    if (showUserLinks) {
+      headerUserLinks.css("display", "flex");
+    } else {
+      headerAuthLinks.css("display", "flex");
+    }
+
+    // reset mobile header toggle
+    const headerToggleBars = $(".header-toggle-bar");
+    const headerToggleClose1 = $("#header-toggle-close1");
+    const headerToggleClose2 = $("#header-toggle-close2");
+    
+    mobileHeaderOpen = false;
+
+    for (bar of headerToggleBars) {
+      bar.style.display = "block";
+    }
+
+    headerToggleClose1.hide();
+    headerToggleClose2.hide();
+  } else {
+    headerAuthLinks.css("display", "none");
+    headerUserLinks.css("display", "none");
+  }
+});
