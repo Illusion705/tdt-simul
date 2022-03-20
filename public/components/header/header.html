@@ -22,7 +22,21 @@
 <div id="header-user-links">
   <a href="/contribute"><div class="header-link"><span>Contribute</span></div></a>
   <a href="/chat"><div class="header-link"><span>Chat Room</span></div></a>
-  <div id="header-account-dropdown"></div>
+  
+  <div id="header-account-dropdown" tabindex="0">
+    <div id="header-dropdown-icon">
+      <span></span>
+      <strong id="header-icon-notification-count"></strong>
+    </div>
+    <p id="header-dropdown-username"></p>
+    <strong><p id="header-dropdown-arrow">&gt;</p></strong>
+
+    <div id="header-dropdown-options">
+      <a tabindex="0" class="header-dropdown-option" href="/notifications">Notifications<strong id="header-notification-count"></strong></a>
+      <a tabindex="0" class="header-dropdown-option" href="/settings">Settings</a>
+      <a tabindex="0" class="header-dropdown-option" href="/logout">Logout</a>
+    </div>
+  </div> 
 </div>
 
 <div id="header-message">

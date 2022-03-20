@@ -26,8 +26,9 @@ router.get("/user", async (req, res) => {
       firstName: req.user.firstName,
       lastName: req.user.lastName,
       isAdmin: req.user.isAdmin,
-      notificationCount: req.user.notifications.length,
-      verificationStatus: req.user.verificationStatus
+      notificationCount: req.user.notificationCount,
+      verificationStatus: req.user.verificationStatus,
+      defaultIconColor: req.user.defaultIconColor
     });
   } else {
     res.json({ message: "no user found" });
@@ -36,11 +37,14 @@ router.get("/user", async (req, res) => {
 
 router.post("/register", async (req, res) => {
   if (await verifyRegistryData(req.body.username, req.body.firstName, req.body.lastName, req.body.password)) {
+    const defaultIconColor = `rgb(${Math.floor(Math.random() * 70) + 80}, ${Math.floor(Math.random() * 70) + 80}, ${Math.floor(Math.random() * 70) + 80})`;
+    
     const user = new User({
       username: req.body.username.toLowerCase(),
       displayUsername: req.body.username,
       firstName: req.body.firstName,
-      lastName: req.body.lastName
+      lastName: req.body.lastName,
+      defaultIconColor: defaultIconColor
     });
 
     await user.setPassword(req.body.password);

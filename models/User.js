@@ -28,6 +28,10 @@ const userSchema = mongoose.Schema({
     }],
     default: []
   },
+  notificationCount: {
+    type: Number,
+    default: 0
+  },
   isBanned: {
     type: Boolean,
     default: false
@@ -47,7 +51,8 @@ const userSchema = mongoose.Schema({
   verificationStatus: {
     type: String,
     default: "pending"
-  }
+  },
+  defaultIconColor: String
 });
 
 // plugins

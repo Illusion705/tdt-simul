@@ -100,6 +100,9 @@ fetch("/api/user")
       const headerToggleBars = $(".header-toggle-bar");
       const headerToggleClose1 = $("#header-toggle-close1");
       const headerToggleClose2 = $("#header-toggle-close2");
+      const headerDropdownIcon = $("#header-dropdown-icon");
+      const headerDropdownIconText = $("#header-dropdown-icon > span");
+      const headerDropdownUsername = $("#header-dropdown-username");
       
       // setup header
       if (window.innerWidth > 500) {
@@ -133,6 +136,37 @@ fetch("/api/user")
           headerToggleClose2.show();
         }
       });
+
+      // header dropdown
+      if (user) {
+        headerDropdownIcon.css("background", user.defaultIconColor);
+        headerDropdownIconText.text(user.username.charAt(0).toUpperCase());
+        headerDropdownUsername.text(user.username);
+      }
+
+      // adjust header dropdown options width
+      $("#header-dropdown-options").css("width", $("#header-account-dropdown").width() + 17 + "px");
+
+      // header dropdown open/close
+      $("#header-account-dropdown").focus(() => {
+        $("#header-dropdown-options").css("display", "flex");
+      });
+      
+      $("#header-account-dropdown").blur(() => {
+        setTimeout(() => {
+          if (!document.activeElement.classList.contains("header-dropdown-option")) {
+            $("#header-dropdown-options").hide();
+          }
+        }, 1);
+      });
+
+      // header notification count
+      if (user.notificationCount > 0) {
+        $("#header-icon-notification-count").css("display", "flex");
+        $("#header-icon-notification-count").text(user.notificationCount);
+        $("#header-notification-count").css("display", "flex");
+        $("#header-notification-count").text(user.notificationCount);
+      }
     });
   });
 

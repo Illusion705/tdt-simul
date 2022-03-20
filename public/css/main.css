@@ -55,8 +55,7 @@ button {
 }
 
 #header-logo {
-  /*background: #928cba;*/
-  background: linear-gradient(to bottom, 	#0057b7 0%, 	#0057b7 50%, #ffd700 50%, #ffd700 100%);
+  background: #928cba;
   border-radius: 10px 25px;
   display: flex;
   justify-content: center;
@@ -67,10 +66,6 @@ button {
   font-family: 'Lalezar', cursive;
   font-size: 40px;
   margin-left: 10px;
-}
-
-#header-logo > span {
-  color: white;
 }
 
 #header-auth-links, #header-user-links {
@@ -187,4 +182,100 @@ button {
 
 #header-toggle-close2 {
   transform: rotate(-45deg);
+}
+
+#header-account-dropdown {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  height: 55px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#header-account-dropdown:hover, #header-account-dropdown:focus {
+  background: #433f5a;
+}
+
+#header-dropdown-icon {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border: 2px solid #423d5c;
+  color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 17px;
+  font-family: Tahoma, sans-serif;
+  margin-right: 7px;
+  user-select: none;
+}
+
+#header-dropdown-arrow {
+  margin-left: 7px;
+  transform: rotate(90deg) translateX(2px);
+  color: #676c78;
+  user-select: none;
+}
+
+#header-dropdown-options {
+  background: #333046;
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  border: 2px solid #423d5c;
+  border-radius: 0 0 5px 5px;
+  cursor: pointer;
+  transform: translate(-10px, 70px);
+}
+
+.header-dropdown-option {
+  padding-left: 5px;
+  padding-right: 20px;
+  padding-top: 2.5px;
+  padding-bottom: 2.5px;
+}
+
+.header-dropdown-option:hover {
+  background: #433f5a;
+}
+
+.header-dropdown-option:nth-child(3) {
+  border-top: 1px solid #423d5c;
+}
+
+#header-icon-notification-count {
+  background: #afdafd;
+  border: 1px solid #1163a7;
+  color: #1163a7;
+  border-radius: 100px;
+  position: absolute;
+  font-size: 9px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  min-width: 9px;
+  line-height: 9px;
+  transform: translate(11px, -12px);
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+#header-notification-count {
+  background: #afdafd;
+  border: 1px solid #1163a7;
+  color: #1163a7;
+  border-radius: 100px;
+  position: absolute;
+  font-size: 9px;
+  transform: translateY(-3px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  min-width: 11px;
+  line-height: 9px;
+  transform: translate(90px, -23px);
+  padding-left: 2px;
+  padding-right: 2px;
 }
