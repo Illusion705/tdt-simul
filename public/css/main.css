@@ -241,8 +241,8 @@ button {
   background: #433f5a;
 }
 
-.header-dropdown-option:nth-child(3) {
-  border-top: 1px solid #423d5c;
+#dropdown-hr {
+  color: #423d5c;
 }
 
 #header-icon-notification-count {
@@ -278,4 +278,30 @@ button {
   transform: translate(90px, -23px);
   padding-left: 2px;
   padding-right: 2px;
+}
+
+#header-mobile-user-links, #header-mobile-auth-links {
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  transform: translate(-110px, 38px);
+  width: 150px;
+  background-color: #333046;
+  border: 2px solid #423d5c;
+  border-radius: 0 0 5px 5px
+}
+
+#dropdown-hr {
+  border: 1px solid #423d5c;
+  background: #423d5c;
+}
+
+.header-mobile-link {
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.header-mobile-link:hover {
+  background: #433f5a;
 }

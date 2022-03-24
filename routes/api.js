@@ -28,7 +28,7 @@ router.get("/user", async (req, res) => {
       isAdmin: req.user.isAdmin,
       notificationCount: req.user.notificationCount,
       verificationStatus: req.user.verificationStatus,
-      defaultIconColor: req.user.defaultIconColor
+      defaultIconColor: req.user.defaultIconColor,
     });
   } else {
     res.json({ message: "no user found" });
@@ -66,7 +66,7 @@ router.post("/login", async (req, res) => {
   if (req.body.username && req.body.password) {
     User.authenticate()(req.body.username.toLowerCase(), req.body.password)
       .then(({ user }) => {
-        if (user) {
+        if (user && !user.isDeleted) {
           req.login(user, err => {
             if (err) {
               res.json({ status: "failed", reason: "internal server error" });

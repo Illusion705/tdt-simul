@@ -10,6 +10,25 @@ const configPassport = require("./config/passport");
 // create app
 const app = express();
 
+// middleware
+function checkDeleted(req, res, next) {
+  if (req.user && req.user.isDeleted) {
+    res.redirect("/logout");
+  } else {
+    next();
+  }
+}
+
+function checkBanned(req, res, next) {
+  const urlStart = req.originalUrl.split("/")[1];
+  
+  if (req.user && req.user.isBanned && req.originalUrl !== "/banned" && req.originalUrl !== "/logout" && urlStart !== "public" && urlStart !== "api") {
+    res.redirect("/banned");
+  } else {
+    next();
+  }
+}
+
 // app setup
 app.set("view-engine", "ejs");
 
@@ -24,6 +43,9 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(checkDeleted);
+app.use(checkBanned);
 
 // config passport
 configPassport(passport);
@@ -44,5 +66,5 @@ mongoose.connect(dbString, () => {
   console.log("Connected to database.");
 
   // init app
-  app.listen(port, () => console.log(`Server listening on port ${port}`));
+  app.listen(port, () => console.log(`Server listening on port ${port}.`));
 });

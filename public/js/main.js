@@ -1,5 +1,6 @@
 // global variables
 let mobileHeaderOpen = false;
+let mobileDropdownOpen = false;
 
 // loading button animation
 class LoadingAnimation {
@@ -137,8 +138,8 @@ fetch("/api/user")
         }
       });
 
-      // header dropdown
-      if (user) {
+      // fill header user info
+      if (user.username) {
         headerDropdownIcon.css("background", user.defaultIconColor);
         headerDropdownIconText.text(user.username.charAt(0).toUpperCase());
         headerDropdownUsername.text(user.username);
@@ -147,7 +148,7 @@ fetch("/api/user")
       // adjust header dropdown options width
       $("#header-dropdown-options").css("width", $("#header-account-dropdown").width() + 17 + "px");
 
-      // header dropdown open/close
+      // header user info dropdown open/close
       $("#header-account-dropdown").focus(() => {
         $("#header-dropdown-options").css("display", "flex");
       });
@@ -167,6 +168,24 @@ fetch("/api/user")
         $("#header-notification-count").css("display", "flex");
         $("#header-notification-count").text(user.notificationCount);
       }
+
+      // header mobile dropdown open/close
+      $("#header-toggle").click(() => {
+        if (mobileDropdownOpen) {
+          mobileDropdownOpen = false;
+
+          $("#header-mobile-user-links").hide();
+          $("#header-mobile-auth-links").hide();
+        } else {
+          mobileDropdownOpen = true;
+
+          if (user.username) {
+            $("#header-mobile-user-links").css("display", "flex");
+          } else {
+            $("#header-mobile-auth-links").css("display", "flex");
+          }
+        }
+      });
     });
   });
 
@@ -197,6 +216,11 @@ $(window).resize(() => {
 
     headerToggleClose1.hide();
     headerToggleClose2.hide();
+
+    mobileDropdownOpen = false;
+
+    $("#header-mobile-auth-links").hide();
+    $("#header-mobile-user-links").hide();
   } else {
     headerAuthLinks.css("display", "none");
     headerUserLinks.css("display", "none");

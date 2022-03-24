@@ -4,13 +4,38 @@
 
 <a href="/"><h1 id="header-logo"><span>simul</span></h1></a>
 
-<div id="header-toggle">
-  <span class="header-toggle-bar"></span>
-  <span class="header-toggle-bar"></span>
-  <span class="header-toggle-bar"></span>
+<div id="header-mobile-dropdown">
+  <div id="header-toggle">
+    <span class="header-toggle-bar"></span>
+    <span class="header-toggle-bar"></span>
+    <span class="header-toggle-bar"></span>
+    
+    <span id="header-toggle-close1"></span>
+    <span id="header-toggle-close2"></span>
   
-  <span id="header-toggle-close1"></span>
-  <span id="header-toggle-close2"></span>
+    <div id="header-mobile-auth-links">
+      <a href="/register"><div class="header-mobile-link">Register</div></a>
+      <a href="/login"><div class="header-mobile-link">Sign In</div></a>
+      <a href="/contribute"><div class="header-mobile-link">Contribute</div></a>
+    </div>
+  </div>
+  
+  <div id="header-mobile-user-links">
+    <div class="header-mobile-link">
+      <div id="header-mobile-user-icon"></div>
+      <div id="header-mobile-user-username"></div>
+    </div>
+    
+    <a href="/notifications"><div class="header-mobile-link">Notifications</div></a>
+    <a href="/settings"><div class="header-mobile-link">Settings</div></a>
+
+    <hr id="dropdown-hr" />
+    <a href="/contribute"><div class="header-mobile-link">Contribute</div></a>
+    <a href="/chat"><div class="header-mobile-link">Chat Room</div></a>
+    
+    <hr id="dropdown-hr" />
+    <a href="/logout"><div class="header-mobile-link">Logout</div></a>
+  </div>
 </div>
   
 <div id="header-auth-links">
@@ -34,6 +59,7 @@
     <div id="header-dropdown-options">
       <a tabindex="0" class="header-dropdown-option" href="/notifications">Notifications<strong id="header-notification-count"></strong></a>
       <a tabindex="0" class="header-dropdown-option" href="/settings">Settings</a>
+      <hr id="dropdown-hr" />
       <a tabindex="0" class="header-dropdown-option" href="/logout">Logout</a>
     </div>
   </div> 
