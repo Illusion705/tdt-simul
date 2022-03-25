@@ -1,6 +1,5 @@
 // dependencies
 const router = require("express").Router();
-const bcrypt = require("bcrypt");
   
 const verifyRegistryData = require("../config/verify-registry-data");
 
