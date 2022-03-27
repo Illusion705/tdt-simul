@@ -12,21 +12,26 @@
     
     <span id="header-toggle-close1"></span>
     <span id="header-toggle-close2"></span>
-  
-    <div id="header-mobile-auth-links">
-      <a href="/register"><div class="header-mobile-link">Register</div></a>
-      <a href="/login"><div class="header-mobile-link">Sign In</div></a>
-      <a href="/contribute"><div class="header-mobile-link">Contribute</div></a>
-    </div>
+
+    <div id="header-mobile-notification-indicator"></div>
+  </div>
+
+  <div id="header-mobile-auth-links">
+    <a href="/register"><div class="header-mobile-link">Register</div></a>
+    <a href="/login"><div class="header-mobile-link">Sign In</div></a>
+    <a href="/contribute"><div class="header-mobile-link">Contribute</div></a>
   </div>
   
   <div id="header-mobile-user-links">
-    <div class="header-mobile-link">
-      <div id="header-mobile-user-icon"></div>
-      <div id="header-mobile-user-username"></div>
+    <div id="header-mobile-user-info">
+      <div class="header-icon">
+        <span></span>
+      </div>
+      <p class="header-username"></p>
     </div>
-    
-    <a href="/notifications"><div class="header-mobile-link">Notifications</div></a>
+
+    <hr id="dropdown-hr" />
+    <a href="/notifications"><div class="header-mobile-link">Notifications<strong id="header-mobile-notification-count"></strong></div></a>
     <a href="/settings"><div class="header-mobile-link">Settings</div></a>
 
     <hr id="dropdown-hr" />
@@ -49,11 +54,11 @@
   <a href="/chat"><div class="header-link"><span>Chat Room</span></div></a>
   
   <div id="header-account-dropdown" tabindex="0">
-    <div id="header-dropdown-icon">
+    <div class="header-icon">
       <span></span>
       <strong id="header-icon-notification-count"></strong>
     </div>
-    <p id="header-dropdown-username"></p>
+    <p class="header-username"></p>
     <strong><p id="header-dropdown-arrow">&gt;</p></strong>
 
     <div id="header-dropdown-options">

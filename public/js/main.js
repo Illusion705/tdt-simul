@@ -101,18 +101,21 @@ fetch("/api/user")
       const headerToggleBars = $(".header-toggle-bar");
       const headerToggleClose1 = $("#header-toggle-close1");
       const headerToggleClose2 = $("#header-toggle-close2");
-      const headerDropdownIcon = $("#header-dropdown-icon");
-      const headerDropdownIconText = $("#header-dropdown-icon > span");
-      const headerDropdownUsername = $("#header-dropdown-username");
+      const headerIcons = $(".header-icon");
+      const headerIconTexts = $(".header-icon > span");
+      const headerUsernames = $(".header-username");
       
       // setup header
-      if (window.innerWidth > 500) {
+      if (window.innerWidth > 520) {
         if (user.message) {
           headerAuthLinks.css("display", "flex");
         } else {
           headerUserLinks.css("display", "flex");
-          showUserLinks = true;
         }
+      }
+
+      if (!user.message) {
+        showUserLinks = true;
       }
 
       // header hamburger toggle
@@ -140,13 +143,21 @@ fetch("/api/user")
 
       // fill header user info
       if (user.username) {
-        headerDropdownIcon.css("background", user.defaultIconColor);
-        headerDropdownIconText.text(user.username.charAt(0).toUpperCase());
-        headerDropdownUsername.text(user.username);
+        headerIcons.each((i, elmnt) => {
+          $(elmnt).css("background", user.defaultIconColor);
+        });
+
+        headerIconTexts.each((i, elmnt) => {
+          $(elmnt).text(user.username.charAt(0).toUpperCase());
+        });
+
+        headerUsernames.each((i, elmnt) => {
+          $(elmnt).text(user.username);
+        });
       }
 
       // adjust header dropdown options width
-      $("#header-dropdown-options").css("width", $("#header-account-dropdown").width() + 17 + "px");
+      $("#header-dropdown-options").css("width", $("#header-account-dropdown").width() + 16 + "px");
 
       // header user info dropdown open/close
       $("#header-account-dropdown").focus(() => {
@@ -165,9 +176,17 @@ fetch("/api/user")
       if (user.notificationCount > 0) {
         $("#header-icon-notification-count").css("display", "flex");
         $("#header-icon-notification-count").text(user.notificationCount);
+        
         $("#header-notification-count").css("display", "flex");
         $("#header-notification-count").text(user.notificationCount);
+        
+        $("#header-mobile-notification-count").css("display", "flex");
+        $("#header-mobile-notification-count").text(user.notificationCount);
+
+        $("#header-mobile-notification-indicator").css("display", "flex");
       }
+
+      $("#header-mobile-notification-count").css("transform", `translate(${($("#header-mobile-user-links").width() - 150) / 2 + 125}px, -25px)`)
 
       // header mobile dropdown open/close
       $("#header-toggle").click(() => {
@@ -176,6 +195,8 @@ fetch("/api/user")
 
           $("#header-mobile-user-links").hide();
           $("#header-mobile-auth-links").hide();
+          
+          $("#header-mobile-notification-indicator").css("display", "flex")
         } else {
           mobileDropdownOpen = true;
 
@@ -184,6 +205,8 @@ fetch("/api/user")
           } else {
             $("#header-mobile-auth-links").css("display", "flex");
           }
+          
+          $("#header-mobile-notification-indicator").hide();
         }
       });
     });
@@ -196,7 +219,7 @@ $(window).resize(() => {
   const headerUserLinks = $("#header-user-links");
 
   // show/hide elements
-  if (window.innerWidth > 500) {
+  if (window.innerWidth > 520) {
     if (showUserLinks) {
       headerUserLinks.css("display", "flex");
     } else {
@@ -225,4 +248,7 @@ $(window).resize(() => {
     headerAuthLinks.css("display", "none");
     headerUserLinks.css("display", "none");
   }
+
+  // update user dropdown options width
+  $("#header-dropdown-options").css("width", $("#header-account-dropdown").width() + 16 + "px");
 });

@@ -13,7 +13,8 @@ const app = express();
 // middleware
 function checkDeleted(req, res, next) {
   if (req.user && req.user.isDeleted) {
-    res.redirect("/logout");
+    req.logout();
+    res.redirect("/");
   } else {
     next();
   }
