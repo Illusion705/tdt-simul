@@ -195,8 +195,10 @@ fetch("/api/user")
 
           $("#header-mobile-user-links").hide();
           $("#header-mobile-auth-links").hide();
-          
-          $("#header-mobile-notification-indicator").css("display", "flex")
+
+          if (user.notificationCount > 0) { 
+            $("#header-mobile-notification-indicator").css("display", "flex");
+          }
         } else {
           mobileDropdownOpen = true;
 
