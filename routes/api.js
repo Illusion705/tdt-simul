@@ -1,10 +1,12 @@
 // dependencies
 const router = require("express").Router();
   
-const verifyRegistryData = require("../config/verify-registry-data");
+const verifyRegistryData = require("../lib/verify-registry-data");
+const createAlert = require("../lib/create-alert");
 
 // models
 const User = require("../models/User");
+const Alert = require("../models/Alert");
 
 // routes
 router.get("/username_status/:username", (req, res) => {
@@ -79,6 +81,119 @@ router.post("/login", async (req, res) => {
       });
   } else {
     res.json({ status: "failed", reason: "invalid data" });
+  }
+});
+
+router.get("/ban_info", (req, res) => {
+  if (req.isAuthenticated()) {
+    if (req.user.isBanned) {
+      res.json({
+        banReason: req.user.banReason,
+        banExpiration: req.user.banExpiration
+      });
+    } else {
+      res.json({ message: "user not banned" });
+    }
+  } else {
+    res.json({ message: "no user found" });
+  }
+});
+
+router.get("/notifications", async (req, res) => {
+  if (req.isAuthenticated()) {
+    const user = req.user;
+    let notifications = [];
+
+    for (let i = 0; i < user.notifications.length; i++) {
+      const notificationInfo = user.notifications[i];
+
+      if (notificationInfo.notifType === "alert") {
+        await Alert.findOne({ id: notificationInfo.id })
+          .then(alert => {
+            notifications.push({
+              type: "alert",
+              id: alert.id,
+              date: alert.date,
+              message: alert.message,
+              isSeen: alert.isSeen,
+              isUserConfirmed: alert.isUserConfirmed
+            });
+          });
+      }
+    }
+  
+    res.json(notifications);
+  } else {
+    res.json({
+      message: "no user found"
+    });
+  }
+});
+
+router.post("/alert", async (req, res) => {
+  if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
+    // create alert
+    if (await createAlert(req.body.message, req.body.username) === "success") {
+      // return successful
+      res.json({
+        message: "alert sent successfully"
+      });
+    } else {
+      // return error
+      res.json({
+        message: "invalid user"
+      });
+    }
+  } else {
+    res.json({
+      message: "action prohibited"
+    });
+  }
+});
+
+router.post("/ban", async (req, res) => {
+  if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
+    if (req.body.banReason) {
+      // create alert
+      if (await createAlert(req.body.banReason, req.body.username) !== "success") {
+        // return error
+        res.json({
+          message: "invalid user"
+        });
+      }
+    } 
+
+    // ban user
+    User.findOne({ username: req.body.username })
+      .then(async user => {
+        if (user) {
+          user.isBanned = true;
+
+          if (req.body.banReason) {
+            user.banReason = req.body.banReason;
+          } else if (user.banReason) {
+            delete user.banReason;
+          }
+          
+          user.banExpiration = req.body.banExpiration;
+  
+          await user.save();
+  
+          // return successful
+          res.json({
+            message: "ban successful"
+          });
+        } else {
+          // return error
+          res.json({
+            message: "invalid user"
+          });
+        }
+      });
+  } else {
+    res.json({
+      message: "action prohibited"
+    });
   }
 });
 

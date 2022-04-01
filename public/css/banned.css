@@ -2,5 +2,49 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  flex-direction: column;
+  width: 100vw;
+}
+
+#ban-info-container {
+  max-width: 85vw;
+  margin-left: 10px;
+  margin-right: 10px;
+  border: 1px solid #423d5c;
+  background: #333046;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 20px;
+  margin-bottom: 100px;
+}
+
+main > h1, main > p {
+  margin-left: 10px;
+  margin-right: 10px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+main > h1 {
+  margin-top: 20px;
+}
+
+main > p {
+  color: #6282a8;
+}
+
+#ban-reason-container {
+  background: #99cce8;
+  border-radius: 5px;
+  border: 1px solid #1d345e;
+  padding: 5px;
+}
+
+#ban-reason-container > strong {
+  color: #1d345e;
+}
+
+#ban-reason {
+  color: #1d345e;
 }

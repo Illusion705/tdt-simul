@@ -6,13 +6,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/public/css/main.css" />
   <link rel="stylesheet" href="/public/css/banned.css" />
-  <title>Account Blocked</title>
+  <title>Account Banned</title>
 </head>
 <body>
   <header></header>
   
   <main>
-    Your account has been banned
+    <h1>Account Banned</h1>
+    <p>Your account has been banned from accessing and interacting with the chat.</p>
+
+    <div id="ban-info-container">
+      <br />
+      <div id="ban-reason-container">
+        <strong>Reason:</strong>
+        <span id="ban-reason"></span>
+      </div>
+
+      <br />
+      <div id="ban-expiration">Ban Expiration: <strong></strong></div>
+  
+      <br />
+      <p>Here <span>are</span> the past <strong id="admin-alert-count"></strong> admin <span>alerts</span>:</p>
+      <ul id="admin-alerts-container"></ul>
+  
+      <br />
+      <h2>Community Guidelines</h2>
+      <br />
+      <ul>
+        <li>
+          <strong>Be Respectful:</strong>
+          <span>Respect the opinions, characteristics, and interests of others. Be kind towards others no matter their age, gender, race, political opinions, and beliefs.</span>
+        </li>
+        <br />
+        <li>
+          <strong>Be Honest:</strong>
+          <span>Have integrity when communicating with others. Don't lie, cheat, or steal with malice. Do not attempt to impersonate others. Never in any way attempt to take advantage of or divulge vulnerabilities within the website. Never attempt to hack another user's account.</span>
+        </li>
+        <br />
+        <li>
+          <strong>Be Safe:</strong>
+          <span>Never ask for personal information from others such as SSN, passwords, address, and other sensitive information. Along with this, never reveal sensitive information like this of your own or others.</span>
+        </li>
+        <br />
+        <li>
+          <strong>Practice Professionalism:</strong>
+          <span>Don't post rude or inappropriate comments, images, or links to websites that don't follow these guidelines. All content posted should be safe for anyone of any age. Remember that TDT and Simul are available to students as young as twelve.</span>
+        </li>
+      </ul>
+  
+      <br />
+      <form id="unban-request-form">
+        <h2>Request Unban</h2>
+        <br />
+        <p>If you would like to request for your account to be unbanned, explain the following:</p>
+        <ul>
+          <li>The reason in your own words for your account ban.</li>
+          <li>What changes you will make in the future when posting to avoid your account being banned in the future.</li>
+          <li>If necessary, your reason for choosing to break the above guidelines.</li>
+        </ul>
+  
+        <textarea id="unban-request"></textarea>
+        <button id="submit-unban-request-form">Submit</button>
+      </form>
+    </div>
   </main>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

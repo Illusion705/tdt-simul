@@ -8,9 +8,9 @@ const userSchema = mongoose.Schema({
   displayUsername: String,
   firstName: String,
   lastName: String,
-  isAdmin: {
-    type: Boolean,
-    default: false
+  adminLevel: {
+    type: Number,
+    default: 0
   },
   dateCreated: {
     type: Date,
@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema({
   },
   notifications: {
     type: [{
-      type: String,
+      notifType: String,
       id: Number
     }],
     default: []
@@ -35,14 +35,8 @@ const userSchema = mongoose.Schema({
     type: Boolean,
     default: false
   },
-  banReason: {
-    type: String,
-    default: null
-  },
-  banExpiration: {
-    type: Date,
-    default: null
-  },
+  banReason: String,
+  banExpiration: Date,
   isDeleted: {
     type: Boolean,
     default: false

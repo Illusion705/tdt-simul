@@ -24,7 +24,7 @@ function checkBanned(req, res, next) {
   const urlStart = req.originalUrl.split("/")[1];
   
   if (req.user && req.user.isBanned && req.originalUrl !== "/banned" && req.originalUrl !== "/logout" && urlStart !== "public" && urlStart !== "api") {
-    res.redirect("/banned");
+    res.render("banned.ejs");
   } else {
     next();
   }

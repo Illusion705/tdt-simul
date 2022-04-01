@@ -6,7 +6,8 @@
 }
 
 main {
-  transform: translateY(55px);
+  position: absolute;
+  top: 55px;
 }
 
 body {

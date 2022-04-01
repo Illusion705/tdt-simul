@@ -56,13 +56,5 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-router.get("/banned", (req, res) => {
-  if (req.user && req.user.isBanned) {
-    res.render("banned.ejs");
-  } else {
-    res.redirect("/");
-  }
-});
-
 // export router
 module.exports = router;
