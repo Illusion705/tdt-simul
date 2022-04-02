@@ -54,9 +54,18 @@ configPassport(passport);
 // routers
 const mainRouter = require("./routes/main");
 const apiRouter = require("./routes/api");
+const adminRouter = require("./routes/admin");
 
 app.use("/", mainRouter);
 app.use("/api", apiRouter);
+app.use("/admin", adminRouter);
+
+// 404
+function render404(req, res) {
+  res.render("404.ejs");
+} 
+
+app.use(render404);
 
 // database setup
 const port = process.env.PORT || 3001;

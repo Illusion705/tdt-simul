@@ -1,0 +1,35 @@
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 55px);
+  width: 100vw;
+}
+
+#container {
+  max-width: 50vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #423d5c;
+  background: #333046;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+#container > h1 {
+  text-align: center;
+}
+
+#container > h2 {
+  text-align: center;
+  color: #6282a8;
+}
+
+#container > p {
+  text-align: center;
+}
+
+#container > p > a {
+  color: #6282a8;
+}
