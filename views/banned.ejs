@@ -32,7 +32,7 @@
       <br />
       <h2>Community Guidelines</h2>
       <br />
-      <ul>
+      <ul id="community-guidelines-container">
         <li>
           <strong>Be Respectful:</strong>
           <span>Respect the opinions, characteristics, and interests of others. Be kind towards others no matter their age, gender, race, political opinions, and beliefs.</span>
@@ -59,14 +59,19 @@
         <h2>Request Unban</h2>
         <br />
         <p>If you would like to request for your account to be unbanned, explain the following:</p>
-        <ul>
+        <br />
+        <ul id="unban-requirements">
           <li>The reason in your own words for your account ban.</li>
+          <br />
           <li>What changes you will make in the future when posting to avoid your account being banned in the future.</li>
+          <br />
           <li>If necessary, your reason for choosing to break the above guidelines.</li>
         </ul>
-  
-        <textarea id="unban-request"></textarea>
-        <button id="submit-unban-request-form">Submit</button>
+
+        <div id="unban-input">
+          <textarea id="unban-request"></textarea>
+          <button id="submit-unban-request-form" class="button-disabled" disabled>Submit</button>
+        </div>
       </form>
     </div>
   </main>

@@ -1,3 +1,4 @@
+// date format
 function formatDate(dateStr) {
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const date = new Date(dateStr);
@@ -53,3 +54,77 @@ fetch("/api/notifications")
       }
     }
   });
+
+// update submit button state
+$("#unban-request").on("input propertychange paste", () => {
+  if ($("#unban-request").val()) {
+    $("#submit-unban-request-form")
+      .addClass("button-enabled")
+      .removeClass("button-disabled")
+      .attr("disabled", false);
+  } else {
+    $("#submit-unban-request-form")
+      .addClass("button-disabled")
+      .removeClass("button-enabled")
+      .attr("disabled", true);
+  }
+});
+
+// submit unban request
+$("#submit-unban-request-form").click(e => {
+  e.preventDefault();
+
+  // disable button and input
+  $("#submit-unban-request-form")
+    .addClass("button-disabled")
+    .removeClass("button-enabled")
+    .attr("disabled", true);
+
+  $("#unban-request").attr("disabled", true);
+
+  // start loading animation
+  const loadingAnimation = new LoadingAnimation($("#submit-unban-request-form"));
+  loadingAnimation.start();
+
+  // send unban request
+  fetch("/api/unban_request", {
+    method: "POST",
+    body: JSON.stringify({
+      message: $("#unban-request").val()
+    }),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+  .then(response => response.json())
+  .then(response => {
+    // delete input data
+    $("#unban-request").val("");
+
+    // end loading animation
+    loadingAnimation.end();
+
+    // check response
+    if (response.status === "success") {
+      const successMsg = new HeaderMessage("Request successfully sent.", "green", 2);
+      successMsg.display();
+    } else {
+
+      // display error message
+      let errorMsg;
+      switch (response.reason) {
+        case "no message provided":
+          errorMsg = new HeaderMessage("Error: You must provide a message.", "red", 2);
+          break;
+        case "action prohibited":
+          errorMsg = new HeaderMessage("Error: You must be signed into a banned account to submit a request.", "red", 2);
+          break;
+      }
+
+      errorMsg.display();
+    }
+
+    // enable input
+    $("#unban-request").attr("disabled", false);
+  });
+});

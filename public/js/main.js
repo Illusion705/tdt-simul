@@ -47,7 +47,7 @@ class HeaderMessage {
     if (color === "red") {
       this.color = "#e35b5b";
     } else {
-      this.color = "#5be35d";
+      this.color = "#8acf8b";
     }
 
     this.time = time;

@@ -7,6 +7,7 @@ const createAlert = require("../lib/create-alert");
 // models
 const User = require("../models/User");
 const Alert = require("../models/Alert");
+const UnbanRequest = require("../models/Unban-Request");
 
 // routes
 router.get("/username_status/:username", (req, res) => {
@@ -124,9 +125,7 @@ router.get("/notifications", async (req, res) => {
   
     res.json(notifications);
   } else {
-    res.json({
-      message: "no user found"
-    });
+    res.json({ message: "no user found" });
   }
 });
 
@@ -135,19 +134,13 @@ router.post("/alert", async (req, res) => {
     // create alert
     if (await createAlert(req.body.message, req.body.username) === "success") {
       // return successful
-      res.json({
-        message: "alert sent successfully"
-      });
+      res.json({status: "success" });
     } else {
       // return error
-      res.json({
-        message: "invalid user"
-      });
+      res.json({ status: "failed", reason: "invalid user" });
     }
   } else {
-    res.json({
-      message: "action prohibited"
-    });
+    res.json({ status: "failed", message: "action prohibited" });
   }
 });
 
@@ -157,8 +150,7 @@ router.post("/ban", async (req, res) => {
       // create alert
       if (await createAlert(req.body.banReason, req.body.username) !== "success") {
         // return error
-        res.json({
-          message: "invalid user"
+        res.json({ status: "failed", reason: "invalid user"
         });
       }
     } 
@@ -180,20 +172,33 @@ router.post("/ban", async (req, res) => {
           await user.save();
   
           // return successful
-          res.json({
-            message: "ban successful"
-          });
+          res.json({ status: "success" });
         } else {
           // return error
-          res.json({
-            message: "invalid user"
-          });
+          res.json({ status: "failed", reason: "invalid user" });
         }
       });
   } else {
-    res.json({
-      message: "action prohibited"
-    });
+    res.json({ status: "failed", reason: "action prohibited" });
+  }
+});
+
+router.post("/unban_request", async (req, res) => {
+  if (req.isAuthenticated() && req.user.isBanned && !req.user.isDeleted) {
+    if (req.body.message) {
+      const unbanRequest = new UnbanRequest({
+        username: req.user.username,
+        message: req.body.message
+      });
+
+      await unbanRequest.save();
+
+      res.json({ status: "success" });
+    } else {
+      res.json({ status: "failed", reason: "no message provided" });
+    }
+  } else {
+    res.json({ status: "failed", reason: "action prohibited" });
   }
 });
 
