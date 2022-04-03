@@ -211,6 +211,13 @@ fetch("/api/user")
           $("#header-mobile-notification-indicator").hide();
         }
       });
+
+      // admin directory links
+      if (user.adminLevel && !user.isBanned) {
+        $(".admin-directory-link").each((i, elmnt) => {
+          $(elmnt).show();
+        });
+      }
     });
   });
 
@@ -254,3 +261,12 @@ $(window).resize(() => {
   // update user dropdown options width
   $("#header-dropdown-options").css("width", $("#header-account-dropdown").width() + 16 + "px");
 });
+
+// date format
+function formatDate(dateStr) {
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const date = new Date(dateStr);
+  const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()} (${date.getHours() > 12 ? date.getHours() - 12 : date.getHours() === 0 ? "12" : date.getHours()}:${date.getMinutes() > 9 ? "" : "0"}${date.getMinutes()}${date.getHours() > 11 ? "pm" : "am"})`;
+
+  return formattedDate;
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/public/css/main.css" />
+  <link rel="stylesheet" href="/public/css/account-requests.css" />
+  <title>Account Requests</title>
+</head>
+<body>
+  <header></header>
+
+  <template id="request-template">
+    <form class="request" autocomplete="off">
+      <input class="request-username" />
+
+      <div class="request-main-container">
+        <div class="request-info">
+          <span>First Name: <input class="request-first-name" /></span>
+
+          <br />
+          <span for="request-last-name">Last Name: <input class="request-last-name" /></span>
+          
+          <p class="request-date-created">Date Created: <span></span></p>
+        </div>
+        <div class="request-buttons">
+          <button class="accept-request-enabled">Accept</button>
+          <button class="decline-request-enabled">Decline</button>
+        </div>
+      </div>
+    </form>
+  </template>
+  
+  <main>
+    <div class="request" id="filler-request">
+      <p>There are currently no requests.</p>
+    </div>
+  </main>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="/public/js/main.js"></script>
+  <script src="/public/js/account-requests.js"></script>
+</body>
+</html>

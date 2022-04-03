@@ -6,7 +6,7 @@ const unbanRequestSchema = new mongoose.Schema({
   username: String,
   date: {
     type: Date,
-    default: Date.now()
+    default: Date.now
   },
   message: String,
   status: {

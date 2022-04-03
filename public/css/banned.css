@@ -65,6 +65,10 @@ main > p {
   margin-left: 10px;
 }
 
+#admin-alerts-container {
+  color: #5c8f5b;
+}
+
 #community-guidelines-container, #unban-requirements {
   margin-left: 25px;
 }

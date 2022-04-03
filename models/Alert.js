@@ -6,14 +6,14 @@ const alertSchema = mongoose.Schema({
   id: Number,
   date: {
     type: Date,
-    default: Date.now()
+    default: Date.now
   },
   message: String,
   isSeen: {
     type: Boolean,
     default: false
   },
-  isUserConfirmed: {
+  isConfirmed: {
     type: Boolean,
     default: false
   }

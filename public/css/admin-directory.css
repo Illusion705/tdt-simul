@@ -1,0 +1,75 @@
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 55px);
+  width: 100vw;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #423d5c;
+  background: #333046;
+  padding: 15px;
+  border-radius: 10px;
+  width: 500px;
+}
+
+@media (max-width: 520px) {
+  #container {
+    width: 85vw;
+  }
+}
+
+#level1-links, #level2-links {
+  width: 100%;
+}
+
+#level2-links {
+  display: none;
+}
+
+#level1-links > ul, #level2-links > ul {
+  margin-left: 40px;
+  margin-top: 10px;
+}
+
+#level1-links > ul > li > a, #level2-links > ul > li > a {
+  color: #6282a8;
+}
+
+#level1-links > ul > li > a:hover, #level2-links > ul > li > a:hover {
+  text-decoration: underline;
+}
+
+#account-request-count, #report-count, #unban-request-count {
+  background: #afdafd;
+  border: 1px solid #1163a7;
+  color: #1163a7;
+  border-radius: 100px;
+  position: absolute;
+  font-size: 11px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  min-width: 11px;
+  line-height: 11px;
+  padding-left: 2px;
+  padding-right: 2px;
+  padding-bottom: 1px;
+  padding-top: 1px;
+}
+
+#account-request-count {
+  transform: translate(130px, -25px);
+}
+
+#report-count {
+  transform: translate(105px, -25px);
+}
+
+#unban-request-count {
+  transform: translate(120px, -25px);
+}

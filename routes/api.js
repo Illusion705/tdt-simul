@@ -27,10 +27,11 @@ router.get("/user", async (req, res) => {
       username: req.user.displayUsername,
       firstName: req.user.firstName,
       lastName: req.user.lastName,
-      isAdmin: req.user.isAdmin,
+      adminLevel: req.user.adminLevel,
       notificationCount: req.user.notificationCount,
       verificationStatus: req.user.verificationStatus,
       defaultIconColor: req.user.defaultIconColor,
+      isBanned: req.user.isBanned
     });
   } else {
     res.json({ message: "no user found" });
@@ -156,7 +157,7 @@ router.post("/ban", async (req, res) => {
     } 
 
     // ban user
-    User.findOne({ username: req.body.username })
+    User.findOne({ username: req.body.username.toLowerCase() })
       .then(async user => {
         if (user) {
           user.isBanned = true;
@@ -199,6 +200,30 @@ router.post("/unban_request", async (req, res) => {
     }
   } else {
     res.json({ status: "failed", reason: "action prohibited" });
+  }
+});
+
+router.get("/account_requests", (req, res) => {
+  if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
+    User.find({ verificationStatus: "pending" })
+      .then(users => {
+        let data = [];
+
+        for (let i = 0; i < users.length; i++) {
+          if (!users[i].isDeleted && !users[i].isBanned) {
+            data.push({
+              username: users[i].displayUsername,
+              firstName: users[i].firstName,
+              lastName: users[i].lastName,
+              dateCreated: users[i].dateCreated
+            });
+          }
+        };
+        
+        res.json(data);
+      });
+  } else {
+    res.json({ message: "access denied" });
   }
 });
 

@@ -1,0 +1,91 @@
+main {
+  display: flex;
+  align-items: center;
+  min-height: calc(100vh - 55px);
+  width: 100vw;
+  flex-direction: column;
+  padding-bottom: 50px;
+}
+
+.request {
+  height: 150px;
+  width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #423d5c;
+  background: #333046;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 20px;
+  flex-direction: column;
+}
+
+#filler-request {
+  opacity: 0.3;
+}
+
+.request input {
+  background: none;
+  border: none;
+}
+
+.request-date-created > span {
+  color: #6282a8;
+}
+
+.request-first-name, .request-last-name {
+  font-size: 16px;
+  color: #6282a8;
+}
+
+.request input:focus {
+  outline: none;
+}
+
+.request-username {
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+}
+
+.request-main-container {
+  display: flex;
+  margin-top: 20px;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.request-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 120px;
+}
+
+.accept-request-enabled {
+  background: #8acf8b;
+}
+
+.decline-request-enabled {
+  background: #e35b5b;
+}
+
+.accept-request-enabled:hover {
+  background: #5da25e;
+}
+
+.decline-request-enabled:hover {
+  background: #b13939;
+}
+
+.accept-request-disabled {
+  background: #5da25e;
+  cursor: not-allowed;
+}
+
+.decline-request-disabled {
+  background: #b13939;
+  cursor: not-allowed;
+}
