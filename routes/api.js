@@ -227,5 +227,27 @@ router.get("/account_requests", (req, res) => {
   }
 });
 
+router.post("/verification_status", (req, res) => {
+  if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
+    User.findOne({ username: req.body.username })
+      .then(async user => {
+        if (user) {
+          if (["pending", "verified", "declined"].includes(req.body.verificationStatus)) {
+            user.verificationStatus = req.body.verificationStatus;
+            await user.save();
+
+            res.json({ status: "success" });
+          } else {
+            res.json({ status: "failed", reason: "invalid status" });
+          }
+        } else {
+          res.json({ status: "failed", reason: "invalid user" });
+        }
+      });
+  } else {
+    res.json({ status: "failed", reason: "action prohibited" });
+  }
+});
+
 // export router
 module.exports = router;
