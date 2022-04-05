@@ -73,7 +73,9 @@ app.use("/admin", adminRouter);
 
 // 404
 function render404(req, res) {
-  res.render("404.ejs");
+  res
+    .status(404)
+    .render("404.ejs");
 } 
 
 app.use(render404);
