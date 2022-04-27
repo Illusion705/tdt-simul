@@ -270,3 +270,60 @@ function formatDate(dateStr) {
 
   return formattedDate;
 }
+
+// verify username
+async function checkUsernameAvailable(username) {
+  let returnValue;
+  
+  await fetch("/api/username_status/" + username)
+    .then(data => data.json())
+    .then(data => {
+      if (data.status === "taken") {
+        returnValue = false;
+      } else {
+        returnValue = true;
+      }
+    });
+
+  return returnValue;
+}
+
+async function verifyUsername(username, takenExceptions = []) {
+  // check username inputted
+  if (!username) {
+    return "no username";
+  }
+
+  // check username length
+  if (username.length > 20 || username.length < 3) {
+    return "invalid length";
+  }
+
+  // check username characters
+  for (let i = 0; i < username.length; i++) {
+    if (!"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_".includes(username[i])) {
+      return "invalid character";
+    }
+  }
+
+  // check username available
+  if (!(await checkUsernameAvailable(username)) && !takenExceptions.includes(username.toLowerCase())) {
+    return "username taken";
+  }
+
+  // valid username
+  return "username valid";
+}
+
+// verify password
+function verifyPassword(password, passwordConfirmation = null) {
+  if (password.length < 8) {
+    return "invalid length";
+  } 
+
+  if (password !== passwordConfirmation && passwordConfirmation !== null) {
+    return "invalid password confirmation";
+  }
+
+  return "password valid";
+}

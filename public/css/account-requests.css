@@ -8,7 +8,6 @@ main {
 }
 
 .request {
-  height: 150px;
   width: 400px;
   display: flex;
   align-items: center;
@@ -88,4 +87,16 @@ main {
 .decline-request-disabled {
   background: #b13939;
   cursor: not-allowed;
+}
+
+.request-message {
+  margin: -15px;
+  margin-top: 10px;
+  border-radius: 0 0 10px 10px;
+  padding: 5px;
+  font-size: 12px;
+  width: calc(100% + 20px);
+  min-height: 35px;
+  display: none;
+  align-items: center;
 }

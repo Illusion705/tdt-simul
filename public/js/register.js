@@ -21,73 +21,8 @@ showPassword.change(() => {
   }
 });
 
-// verify username
-async function checkUsernameAvailable(username) {
-  let returnValue;
-  
-  await fetch("/api/username_status/" + username)
-    .then(data => data.json())
-    .then(data => {
-      if (data.status === "taken") {
-        returnValue = false;
-      } else {
-        returnValue = true;
-      }
-    });
-
-  return returnValue;
-}
-
-async function verifyUsername() {
-  const username = registerUsername.val();
-
-  // check username inputted
-  if (!username) {
-    return "no username";
-  }
-
-  // check username length
-  if (username.length > 20 || username.length < 3) {
-    return "invalid length";
-  }
-
-  // check username characters
-  for (let i = 0; i < username.length; i++) {
-    if (!"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_".includes(username[i])) {
-      return "invalid character";
-    }
-  }
-
-  // check username available
-  if (!(await checkUsernameAvailable(username))) {
-    return "username taken";
-  }
-
-  // valid username
-  return "username valid";
-}
-
-// verify password
-function verifyPassword() {
-  const password = registerPassword.val();
-  const passwordConfirmation = registerPasswordConfirmation.val();
-
-  if (password.length < 8) {
-    return "invalid length";
-  } 
-
-  if (password !== passwordConfirmation) {
-    return "invalid password confirmation";
-  }
-
-  return "password valid";
-}
-
 // verify password confirmation
-function verifyPasswordConfirmation() {
-  const password = registerPassword.val();
-  const passwordConfirmation = registerPasswordConfirmation.val();
-
+function verifyPasswordConfirmation(password, passwordConfirmation) { 
   if (password !== passwordConfirmation) {
     return "invalid password confirmation";
   }
@@ -99,15 +34,15 @@ function verifyPasswordConfirmation() {
 async function dataChanged() {
   updateRegisterButton();
 
-  if (await verifyUsername() === "username valid" || !registerUsername.val()) {
+  if (await verifyUsername(registerUsername.val()) === "username valid" || !registerUsername.val()) {
     usernameWarning.text(null);
   }
 
-  if (verifyPassword() === "password valid" || !registerPassword.val()) {
+  if (verifyPassword(registerPassword.val(), registerPasswordConfirmation.val()) === "password valid" || !registerPassword.val()) {
     passwordWarning.text(null);
   }
 
-  if (verifyPasswordConfirmation() === "password confirmation valid" || !registerPasswordConfirmation.val()) {
+  if (verifyPasswordConfirmation(registerPassword.val(), registerPasswordConfirmation.val()) === "password confirmation valid" || !registerPasswordConfirmation.val()) {
     passwordConfirmationWarning.text(null);
   }
 }
@@ -118,7 +53,7 @@ registerUsername.blur(async () => {
   updateRegisterButton();
   
   // update warning
-  switch (await verifyUsername()) {
+  switch (await verifyUsername(registerUsername.val())) {
     case "username taken":
       usernameWarning.text("username taken");
       break;
@@ -147,7 +82,7 @@ registerPassword.blur(() => {
   updateRegisterButton();
 
   // update warning
-  switch (verifyPassword()) {
+  switch (verifyPassword(registerPassword.val(), registerPasswordConfirmation.val())) {
     case "invalid length":
       passwordWarning.text("password must be at least 8 characters");
       break;
@@ -183,9 +118,7 @@ registerPasswordConfirmation.blur(() => {
   updateRegisterButton();
   
   // update warning
-  console.log(verifyPasswordConfirmation());
-  console.log(registerPassword.val());
-  switch (verifyPasswordConfirmation()) {
+  switch (verifyPasswordConfirmation(registerPassword.val(), registerPasswordConfirmation.val())) {
     case "invalid password confirmation":
       if (registerPassword.val()) {
         passwordConfirmationWarning.text("passwords don't match");
@@ -214,7 +147,7 @@ registerPasswordConfirmation.on("input propertychange paste", dataChanged);
 
 // update register button state
 async function updateRegisterButton() {
-  if (await verifyUsername() === "username valid" && verifyPassword() === "password valid" && verifyPasswordConfirmation() === "password confirmation valid" && registerFirstName.val() && registerLastName.val()) {
+  if (await verifyUsername(registerUsername.val()) === "username valid" && verifyPassword(registerPassword.val(), registerPasswordConfirmation.val()) === "password valid" && verifyPasswordConfirmation(registerPassword.val(), registerPasswordConfirmation.val()) === "password confirmation valid" && registerFirstName.val() && registerLastName.val()) {
     submitRegisterForm
       .addClass("button-enabled")
       .removeClass("button-disabled")

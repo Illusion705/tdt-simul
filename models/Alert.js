@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 // schema
 const alertSchema = mongoose.Schema({
-  id: Number,
+  alertId: Number,
   date: {
     type: Date,
     default: Date.now

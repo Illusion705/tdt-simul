@@ -23,7 +23,7 @@ const userSchema = mongoose.Schema({
   notifications: {
     type: [{
       notifType: String,
-      id: Number
+      notifId: Number
     }],
     default: []
   },

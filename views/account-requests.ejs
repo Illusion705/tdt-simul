@@ -13,22 +13,24 @@
 
   <template id="request-template">
     <form class="request" autocomplete="off">
-      <input class="request-username" />
+      <input class="request-username" maxlength="20" />
 
       <div class="request-main-container">
         <div class="request-info">
-          <span>First Name: <input class="request-first-name" /></span>
+          <span>First Name: <input class="request-first-name" maxlength="20" /></span>
 
           <br />
-          <span for="request-last-name">Last Name: <input class="request-last-name" /></span>
+          <span for="request-last-name">Last Name: <input class="request-last-name" maxlength="20" /></span>
           
           <p class="request-date-created">Date Created: <span></span></p>
         </div>
         <div class="request-buttons">
-          <button class="accept-request-enabled">Accept</button>
-          <button class="decline-request-enabled">Decline</button>
+          <button class="accept-request-enabled accept-request">Accept</button>
+          <button class="decline-request-enabled decline-request">Decline</button>
         </div>
       </div>
+
+      <div class="request-message"></div>
     </form>
   </template>
   

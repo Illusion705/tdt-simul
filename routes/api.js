@@ -1,7 +1,7 @@
 // dependencies
 const router = require("express").Router();
   
-const verifyRegistryData = require("../lib/verify-registry-data");
+const verifyUserData = require("../lib/verify-user-data");
 const createAlert = require("../lib/create-alert");
 
 // models
@@ -39,7 +39,7 @@ router.get("/user", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  if (await verifyRegistryData(req.body.username, req.body.firstName, req.body.lastName, req.body.password)) {
+  if (await verifyUserData(req.body.username, req.body.firstName, req.body.lastName, req.body.password)) {
     const defaultIconColor = `rgb(${Math.floor(Math.random() * 70) + 80}, ${Math.floor(Math.random() * 70) + 80}, ${Math.floor(Math.random() * 70) + 80})`;
     
     const user = new User({
@@ -66,7 +66,7 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  if (req.body.username && req.body.password) {
+  if (typeof req.body.username === "string" && typeof req.body.password === "string") {
     User.authenticate()(req.body.username.toLowerCase(), req.body.password)
       .then(({ user }) => {
         if (user && !user.isDeleted) {
@@ -131,54 +131,58 @@ router.get("/notifications", async (req, res) => {
 });
 
 router.post("/alert", async (req, res) => {
-  if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
-    // create alert
-    if (await createAlert(req.body.message, req.body.username) === "success") {
-      // return successful
-      res.json({status: "success" });
+  if (typeof req.body.message === "string" && typeof req.body.username === "string") {
+    if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
+      // create alert
+      if (await createAlert(req.body.message, req.body.username) === "success") {
+        res.json({status: "success" });
+      } else {
+        res.json({ status: "failed", reason: "invalid user" });
+      }
     } else {
-      // return error
-      res.json({ status: "failed", reason: "invalid user" });
+      res.json({ status: "failed", message: "action prohibited" });
     }
   } else {
-    res.json({ status: "failed", message: "action prohibited" });
+    res.json({ status: "failed", message: "invalid data" });
   }
 });
 
 router.post("/ban", async (req, res) => {
   if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
-    if (req.body.banReason) {
-      // create alert
-      if (await createAlert(req.body.banReason, req.body.username) !== "success") {
-        // return error
-        res.json({ status: "failed", reason: "invalid user"
-        });
-      }
-    } 
-
-    // ban user
-    User.findOne({ username: req.body.username.toLowerCase() })
-      .then(async user => {
-        if (user) {
-          user.isBanned = true;
-
-          if (req.body.banReason) {
-            user.banReason = req.body.banReason;
-          } else if (user.banReason) {
-            delete user.banReason;
-          }
-          
-          user.banExpiration = req.body.banExpiration;
-  
-          await user.save();
-  
-          // return successful
-          res.json({ status: "success" });
-        } else {
+    if (typeof req.body.username === "string" && typeof req.body.banReason === "string") {
+      if (req.body.banReason) {
+        // create alert
+        if (await createAlert(req.body.banReason, req.body.username) !== "success") {
           // return error
-          res.json({ status: "failed", reason: "invalid user" });
+          res.json({ status: "failed", reason: "invalid user"});
         }
-      });
+      } 
+  
+      // ban user
+      User.findOne({ username: req.body.username.toLowerCase() })
+        .then(async user => {
+          if (user) {
+            user.isBanned = true;
+  
+            if (req.body.banReason) {
+              user.banReason = req.body.banReason;
+            } else if (user.banReason) {
+              delete user.banReason;
+            }
+            
+            user.banExpiration = req.body.banExpiration;
+    
+            await user.save();
+    
+            // return successful
+            res.json({ status: "success" });
+          } else {
+            res.json({ status: "failed", reason: "invalid user" });
+          }
+        });
+    } else {
+      res.json({ status: "failed", reason: "invalid data" });
+    }
   } else {
     res.json({ status: "failed", reason: "action prohibited" });
   }
@@ -186,7 +190,7 @@ router.post("/ban", async (req, res) => {
 
 router.post("/unban_request", async (req, res) => {
   if (req.isAuthenticated() && req.user.isBanned && !req.user.isDeleted) {
-    if (req.body.message) {
+    if (typeof req.body.message === "string") {
       const unbanRequest = new UnbanRequest({
         username: req.user.username,
         message: req.body.message
@@ -196,7 +200,7 @@ router.post("/unban_request", async (req, res) => {
 
       res.json({ status: "success" });
     } else {
-      res.json({ status: "failed", reason: "no message provided" });
+      res.json({ status: "failed", reason: "invalid data" });
     }
   } else {
     res.json({ status: "failed", reason: "action prohibited" });
@@ -229,21 +233,67 @@ router.get("/account_requests", (req, res) => {
 
 router.post("/verification_status", (req, res) => {
   if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
-    User.findOne({ username: req.body.username })
-      .then(async user => {
-        if (user) {
-          if (["pending", "verified", "declined"].includes(req.body.verificationStatus)) {
-            user.verificationStatus = req.body.verificationStatus;
-            await user.save();
-
-            res.json({ status: "success" });
+    if (typeof req.body.username === "string" && typeof req.body.verificationStatus === "string") {
+      User.findOne({ username: req.body.username.toLowerCase() })
+        .then(async user => {
+          if (user) {
+            if (["pending", "verified", "declined"].includes(req.body.verificationStatus)) {
+              user.verificationStatus = req.body.verificationStatus;
+              await user.save();
+  
+              res.json({ status: "success" });
+            } else {
+              res.json({ status: "failed", reason: "invalid status" });
+            }
           } else {
-            res.json({ status: "failed", reason: "invalid status" });
+            res.json({ status: "failed", reason: "invalid user" });
           }
+        });
+    } else {
+      res.json({ status: "failed", reason: "invalid data" });
+    }
+  } else {
+    res.json({ status: "failed", reason: "action prohibited" });
+  }
+});
+
+router.post("/update_user_data", async (req, res) => {
+  if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
+    if (typeof req.body.username === "string") {
+      if (await verifyUserData(req.body.newUsername ? req.body.newUsername : null, req.body.firstName ? req.body.firstName : null, req.body.lastName ? req.body.lastName : null, null, [req.body.username.toLowerCase()])) {
+        if (req.body.username) {
+          User.findOne({ username: req.body.username.toLowerCase() })
+            .then(async user => {
+              if (user) {
+                if (req.body.newUsername) {
+                  user.displayUsername = req.body.newUsername;
+                  user.username = req.body.newUsername.toLowerCase();
+                }
+    
+                if (req.body.firstName) {
+                  user.firstName = req.body.firstName;
+                }
+    
+                if (req.body.lastName) {
+                  user.lastName = req.body.lastName;
+                }
+    
+                await user.save();
+    
+                res.json({ status: "success" });
+              } else {
+                res.json({ status: "failed", reason: "invalid user" });
+              }
+            });
         } else {
           res.json({ status: "failed", reason: "invalid user" });
         }
-      });
+      } else {
+        res.json({ status: "failed", reason: "invalid data" });
+      }
+    } else {
+      res.json({ status: "failed", reason: "invalid data" });
+    }
   } else {
     res.json({ status: "failed", reason: "action prohibited" });
   }
