@@ -452,11 +452,11 @@ fetch("/api/account_requests")
           requestLastName.attr("disabled", true);
 
           // update verification status
-          fetch("/verification_status", {
+          fetch("/api/verification_status", {
             method: "POST",
-            body: JSON.strigify({
+            body: JSON.stringify({
               username: data[id - 1].username,
-              verification_status: "declined"
+              verificationStatus: "declined"
             }),
             headers: {
               "Content-Type": "application/json"
