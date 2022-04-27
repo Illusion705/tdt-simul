@@ -490,7 +490,8 @@ fetch("/api/account_requests")
               }
               errorMsg.display();
 
-              // enable inputs
+              // end loading animation and enable inputs
+              loadingAnimation.end();
               requestUsername.attr("disabled", false);
               requestFirstName.attr("disabled", false);
               requestLastName.attr("disabled", false);
