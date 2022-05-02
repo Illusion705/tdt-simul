@@ -4,8 +4,9 @@ let mobileDropdownOpen = false;
 
 // loading button animation
 class LoadingAnimation {
-  constructor(element, size = 20) {
+  constructor(element, size = 20, thickness = 1) {
     this.element = element;
+    this.thickness = thickness;
     this.initialHeight = element.outerHeight();
     this.initialWidth = element.outerWidth();
     this.initialPadding = (element.innerWidth() - element.width()) / 2;
@@ -22,6 +23,10 @@ class LoadingAnimation {
     this.element.css("justify-content", "center");
     this.element.css("align-items", "center");
     this.element.css("padding", "0");
+    loadingCircle.css("border-top", this.thickness + "px solid white");
+    loadingCircle.css("border-bottom", this.thickness + "px solid white");
+    loadingCircle.css("border-left", this.thickness + "px solid transparent");
+    loadingCircle.css("border-right", this.thickness + "px solid transparent");
     this.element.empty();
     this.element.append(loadingCircle);
 

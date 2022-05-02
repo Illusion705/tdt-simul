@@ -299,5 +299,32 @@ router.post("/update_user_data", async (req, res) => {
   }
 });
 
+router.get("/users", (req, res) => {
+  if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
+    User.find()
+      .then(data => {
+        let users = [];
+        
+        for (let i = 0; i < data.length; i++) {
+          users.push({
+            username: data[i].displayUsername,
+            firstName: data[i].firstName,
+            lastName: data[i].lastName,
+            dateCreated: data[i].dateCreated,
+            adminLevel: data[i].adminLevel,
+            notificationCount: data[i].notificationCount,
+            isBanned: data[i].isBanned,
+            isDeleted: data[i].isDeleted,
+            verificationStatus: data[i].verificationStatus
+          });
+        }
+        
+        res.json(users);
+      });
+  } else {
+    res.json({ message: "access denied" });
+  }
+})
+
 // export router
 module.exports = router;

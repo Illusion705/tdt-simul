@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/public/css/main.css" />
+  <link rel="stylesheet" href="/public/css/account-search.css" />
+  <title>Account Search</title>
+</head>
+<body>
+  <header></header>
+  
+  <main>
+    <div id="top-options">
+      <input type="text" placeholder="Search" id="search" />
+
+      <span>
+        <label for="show-unverified">Show Unverified: </label>
+        <input type="checkbox" id="show-unverified" />
+      </span>
+
+      <span>
+        <label for="show-blocked">Show Banned: </label>
+        <input type="checkbox" id="show-banned" />
+      </span>
+
+      <span>
+        <label for="show-unverified">Show Deleted: </label>
+        <input type="checkbox" id="show-deleted" />
+      </span>
+    </div>
+    
+    <hr />
+
+    <div id="user-info">
+      <div id="loading-animation"></div>
+    </div>
+  </main>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="/public/js/main.js"></script>
+  <script src="/public/js/account-search.js"></script>
+</body>
+</html>

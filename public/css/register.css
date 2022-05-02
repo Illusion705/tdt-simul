@@ -27,7 +27,7 @@ main {
   width: 250px;
 }
 
-#register-form-info > input[type=text], #register-form-info > input[type=password] {
+#register-form-info > input[type=text], #register-form-info > input[type=password]/*, #register-form-info > input:autofill/*, #register-form-info > input[type=text]:-webkit-autofill, #register-form-info > input[type=password]:autofill, #register-form-info > input[type=password]:-webkit-autofill*/ {
   background: #262334;
   color: #e0e0e0;
   padding: 5px;
