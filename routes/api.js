@@ -315,7 +315,8 @@ router.get("/users", (req, res) => {
             notificationCount: data[i].notificationCount,
             isBanned: data[i].isBanned,
             isDeleted: data[i].isDeleted,
-            verificationStatus: data[i].verificationStatus
+            verificationStatus: data[i].verificationStatus,
+            notifications: data[i].notifications
           });
         }
         
