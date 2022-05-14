@@ -4,7 +4,7 @@ let mobileDropdownOpen = false;
 
 // loading button animation
 class LoadingAnimation {
-  constructor(element, size = 20, thickness = 1) {
+  constructor(element, size = 20, thickness = 2) {
     this.element = element;
     this.thickness = thickness;
     this.initialHeight = element.outerHeight();

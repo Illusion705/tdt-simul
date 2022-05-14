@@ -44,6 +44,23 @@ fetch("/api/users")
 
       // reverse order
       showData = showData.reverse();
+
+      // display users
+      displayUsers(showData);
+    }
+
+    // display users
+    function displayUsers(showData) {
+      $("#user-info").html(null);
+      $("#user-info").css("justify-content", "flex-start");
+
+      for (let i = 0; i < showData.length; i++) {
+        const user = $($("#user-template").html());
+  
+        user.addClass(`requestId${i + 1}`);
+  
+        $("#user-info").append(user);
+      }
     }
 
     // filter data on load
@@ -91,3 +108,5 @@ fetch("/api/users")
       filterData(searchQuery, showUnverified, showBanned, showDeleted);
     });
   });
+
+console.log($("#top-options-container").height())
