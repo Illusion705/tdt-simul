@@ -56,9 +56,28 @@ fetch("/api/users")
 
       for (let i = 0; i < showData.length; i++) {
         const user = $($("#user-template").html());
-  
-        user.addClass(`requestId${i + 1}`);
-  
+
+        // add user info
+        user.addClass(`userId${i + 1}`);
+        user.children(".user-username")
+          .val(showData[i].username)
+          .addClass(`userId${i + 1}`);
+        user.children("div").children("div").children("span").children(".user-first-name")
+          .val(showData[i].firstName)
+          .addClass(`userId${i + 1}`);
+        user.children("div").children("div").children("span").children(".user-last-name")
+          .val(showData[i].lastName)
+          .addClass(`userId${i + 1}`);
+        user.children("div").children("div").children(".user-date-created").children("span")
+          .text(formatDate(showData[i].dateCreated))
+          .addClass(`userId${i + 1}`);
+
+        // change username to red if deleted
+        if (showData[i].isDeleted) {
+          user.children(".user-username").css("color", "red");
+        }
+        
+        // add to page
         $("#user-info").append(user);
       }
     }
@@ -108,5 +127,3 @@ fetch("/api/users")
       filterData(searchQuery, showUnverified, showBanned, showDeleted);
     });
   });
-
-console.log($("#top-options-container").height())
