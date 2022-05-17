@@ -32,7 +32,7 @@ fetch("/api/users")
           isGood = false;
         }
 
-        if (searchQuery && !user.username.toLowerCase().includes(searchQuery.toLowerCase())) {
+        if (searchQuery && !user.username.toLowerCase().includes(searchQuery.toLowerCase()) && !user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) && !user.lastName.toLowerCase().includes(searchQuery.toLowerCase())) {
           isGood = false;
         }
 
@@ -57,20 +57,50 @@ fetch("/api/users")
       for (let i = 0; i < showData.length; i++) {
         const user = $($("#user-template").html());
 
+        // elements
+        const usernameInput = user.children(".user-username");
+        const firstNameInput = user.children("div").children("div").children("span").children(".user-first-name");
+        const lastNameInput = user.children("div").children("div").children("span").children(".user-last-name");
+        const dateCreated = user.children("div").children("div").children(".user-date-created").children("span");
+        
         // add user info
         user.addClass(`userId${i + 1}`);
-        user.children(".user-username")
+        usernameInput
           .val(showData[i].username)
           .addClass(`userId${i + 1}`);
-        user.children("div").children("div").children("span").children(".user-first-name")
+        firstNameInput
           .val(showData[i].firstName)
           .addClass(`userId${i + 1}`);
-        user.children("div").children("div").children("span").children(".user-last-name")
+        lastNameInput
           .val(showData[i].lastName)
           .addClass(`userId${i + 1}`);
-        user.children("div").children("div").children(".user-date-created").children("span")
+        dateCreated
           .text(formatDate(showData[i].dateCreated))
           .addClass(`userId${i + 1}`);
+
+        // edit button
+        function onEdit() {
+          usernameInput.attr("disabled", false);
+          firstNameInput.attr("disabled", false);
+          lastNameInput.attr("disabled", false);
+        }
+
+        function offEdit() {
+          usernameInput.attr("disabled", true);
+          firstNameInput.attr("disabled", true);
+          lastNameInput.attr("disabled", true);
+        }
+        
+        const editButton = user.children(".edit");
+        editButton.click(() => {
+          if (editButton.text() === "Edit") {
+            editButton.text("Cancel");
+            onEdit();
+          } else {
+            editButton.text("Edit");
+            offEdit();
+          }
+        });
 
         // change username to red if deleted
         if (showData[i].isDeleted) {

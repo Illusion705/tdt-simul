@@ -7,6 +7,10 @@ main {
   padding-bottom: 50px;
 }
 
+input[disabled] {
+  cursor: text;
+}
+
 .request {
   width: 400px;
   display: flex;

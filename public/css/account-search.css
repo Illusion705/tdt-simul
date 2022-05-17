@@ -7,6 +7,10 @@ main {
   padding-bottom: 116px;
 }
 
+input[disabled] {
+  cursor: text;
+}
+
 #search {
   background: #262334;
   color: #e0e0e0;
