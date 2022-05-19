@@ -39,18 +39,21 @@
 
     <template id="user-template">
       <form class="user" autocomplete="off">
-        <p class="edit">Edit</p>
-        
         <input class="user-username" maxlength="20" disabled />
 
         <div class="main-container">
           <div class="general-info">
-            <span for="user-first-name">First Name: <input class="user-first-name" maxlength="20" disabled /></span>
-
-            <br />
-            <span for="user-last-name">Last Name: <input class="user-last-name" maxlength="20" disabled /></span>
+            <p class="edit">Edit</p>
             
+            <span for="user-first-name">First Name: <input class="user-first-name" maxlength="20" disabled /></span>
+            <span for="user-last-name">Last Name: <input class="user-last-name" maxlength="20" disabled /></span>
             <p class="user-date-created">Date Created: <span></span></p>
+          </div>
+
+          <hr class="user-hr1" />
+
+          <div class="status-options">
+            
           </div>
         </div>
       </form>

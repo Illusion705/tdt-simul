@@ -1,3 +1,16 @@
+// mobile friendly
+function fitMobile() {
+  if (window.innerWidth < 330) {
+    $(".user-first-name").width(180 - (330 - window.innerWidth));
+    $(".user-last-name").width(180 - (330 - window.innerWidth));
+  }
+
+  $("#user-info").css("transform", `translateY(${$("#top-options-container").outerHeight()}px)`);
+  $("main").css("padding-bottom", $("#top-options-container").outerHeight() + 50 + "px");
+  $("#user-info").css("min-height", `calc(100vh - 55px - 50px - ${$("#top-options-container").outerHeight()}px)`);
+}
+fitMobile();
+
 // loading animation
 const loadingAnimation = new LoadingAnimation($("#loading-animation"), 50, 5);
 loadingAnimation.start();
@@ -13,6 +26,7 @@ fetch("/api/users")
     let showData = [];
 
     function filterData(searchQuery, showUnverified, showBanned, showDeleted) {
+      // show data list
       showData = [];
 
       for (let i = 0; i < data.length; i++) {
@@ -80,18 +94,33 @@ fetch("/api/users")
 
         // edit button
         function onEdit() {
-          usernameInput.attr("disabled", false);
-          firstNameInput.attr("disabled", false);
-          lastNameInput.attr("disabled", false);
+          usernameInput
+            .attr("disabled", false)
+            .addClass("edit-input");
+          firstNameInput
+            .attr("disabled", false)
+            .addClass("edit-input");
+          lastNameInput
+            .attr("disabled", false)
+            .addClass("edit-input");
         }
 
         function offEdit() {
-          usernameInput.attr("disabled", true);
-          firstNameInput.attr("disabled", true);
-          lastNameInput.attr("disabled", true);
+          usernameInput
+            .attr("disabled", true)
+            .removeClass("edit-input")
+            .val(showData[i].username);
+          firstNameInput
+            .attr("disabled", true)
+            .removeClass("edit-input")
+            .val(showData[i].firstName);
+          lastNameInput
+            .attr("disabled", true)
+            .removeClass("edit-input")
+            .val(showData[i].lastName);
         }
         
-        const editButton = user.children(".edit");
+        const editButton = user.children("div").children("div").children(".edit");
         editButton.click(() => {
           if (editButton.text() === "Edit") {
             editButton.text("Cancel");
@@ -110,6 +139,10 @@ fetch("/api/users")
         // add to page
         $("#user-info").append(user);
       }
+
+      // mobile friendly
+      fitMobile();
+      $(window).resize(fitMobile);
     }
 
     // filter data on load

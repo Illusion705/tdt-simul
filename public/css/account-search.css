@@ -4,7 +4,6 @@ main {
   min-height: calc(100vh - 105px);
   width: 100vw;
   flex-direction: column;
-  padding-bottom: 116px;
 }
 
 input[disabled] {
@@ -45,8 +44,6 @@ input[disabled] {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 175px);
-  transform: translateY(66px);
 }
 
 #loading-animation {
@@ -67,7 +64,7 @@ input[disabled] {
   border-radius: 10px;
   margin-top: 20px;
   flex-direction: column;
-  position: relative;
+  align-items: center;
 }
 
 #filters {
@@ -76,11 +73,13 @@ input[disabled] {
   width: 500px;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 500px) {
   .user {
     width: 85vw;
   }
+}
 
+@media (max-width: 650px) {
   #top-options {
     flex-direction: column;
   }
@@ -105,30 +104,12 @@ input[disabled] {
   position: absolute;
   cursor: pointer;
   right: 7px;
-  top: 5px;
+  bottom: 5px;
+  user-select: none;
 }
 
 .edit:hover {
   text-decoration: underline;
-}
-
-.user-first-name, .user-last-name {
-  font-size: 16px;
-  color: #6282a8;
-  background: none;
-  border: none;
-}
-
-.user-date-created > span {
-  color: #6282a8;
-}
-
-.user-username {
-  width: 100%;
-  text-align: center;
-  font-size: 20px;
-  background: none;
-  border: none;
 }
 
 .user-username:focus, .user-first-name:focus, .user-last-name:focus {
@@ -142,6 +123,62 @@ input[disabled] {
   margin-top: 10px;
 }
 
+.user-hr1 {
+  border: 0.5px solid #423d5c;
+  background: #423d5c;
+  margin-top: 5px;
+}
+
 .main-container {
   margin-top: 20px;
+  width: 100%;
+}
+
+.user-first-name, .user-last-name {
+  font-size: 16px;
+  color: #6282a8;
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 10px;
+  transition: background 500ms, color 500ms;
+  margin-left: 5px;
+  width: 180px;
+}
+
+.user-last-name {
+  margin-top: 5px;
+}
+
+.user-username {
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 15px;
+  transition: background 500ms, color 500ms;
+}
+
+.user-date-created > span {
+  color: #6282a8;
+  padding: 5px;
+  margin-left: 5px;
+}
+
+.edit-input {
+  background: #262334;
+  color: #e0e0e0;
+  padding: 5px;
+  border: 1px solid #423d5c;
+}
+
+.general-info {
+  position: relative;
+}
+
+.general-info > span, .general-info > p {
+  display: flex;
+  align-items: center;
 }
