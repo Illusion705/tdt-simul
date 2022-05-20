@@ -53,7 +53,28 @@
           <hr class="user-hr1" />
 
           <div class="status-options">
-            
+            <div class="admin-level">
+              <p>Admin Level: </p>
+              <div class="admin-level0">0</div>
+              <div class="admin-level1">1</div>
+              <div class="admin-level2">2</div>
+            </div>
+
+            <div class="verification-status-container">
+              <p>Verification: </p>
+              <select class="verification-status">
+                <option class="verification-status-verified" value="verified">Verified</option>
+                <option class="verification-status-pending" value="pending">Pending</option>
+                <option class="verification-status-declined" value="declined">Declined</option>
+              </select>
+            </div>
+
+            <div class="disable-actions">
+              <button class="ban-user">Ban Account</button>
+              <button class="delete-user">Delete Account</button>
+            </div>
+
+            <p class="ban-status"></p>
           </div>
         </div>
       </form>

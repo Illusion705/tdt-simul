@@ -314,6 +314,8 @@ router.get("/users", (req, res) => {
             adminLevel: data[i].adminLevel,
             notificationCount: data[i].notificationCount,
             isBanned: data[i].isBanned,
+            banReason: data[i].isBanned ? data[i].banReason : undefined,
+            banExpiration: data[i].isBanned && data[i].banExpiration ? data[i].banExpiration : undefined,
             isDeleted: data[i].isDeleted,
             verificationStatus: data[i].verificationStatus,
             notifications: data[i].notifications

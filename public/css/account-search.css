@@ -127,6 +127,7 @@ input[disabled] {
   border: 0.5px solid #423d5c;
   background: #423d5c;
   margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .main-container {
@@ -181,4 +182,97 @@ input[disabled] {
 .general-info > span, .general-info > p {
   display: flex;
   align-items: center;
+}
+
+.admin-level {
+  display: flex;
+  align-items: center;
+}
+
+.admin-level > p {
+  color: #b3bad1;
+}
+
+.admin-level0, .admin-level1, .admin-level2 {
+  border: 1px solid #423d5c;
+  background: #262334;
+  border-radius: 7px;
+  width: 20px;
+  height: 20px;
+  margin-left: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: default;
+  opacity: 0.5;
+}
+
+.status-options {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.verification-status-container {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+
+.verification-status-container > p {
+  margin-right: 3px;
+  color: #b3bad1;
+}
+
+.verification-status {
+  background: #262334;
+  border: 1px solid #423d5c;
+  border-radius: 7px;
+  outline: none;
+  padding: 2px;
+}
+
+.verification-status-verified {
+  color: #8ae68b;
+}
+
+.verification-status-pending {
+  color: #e6e38a;
+}
+
+.verification-status-declined {
+  color: #e68a8a;
+}
+
+.disable-actions {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  padding: 10px;
+  padding-bottom: 0;
+}
+
+.ban-user {
+  background: #e35b5b;
+  padding: 5px;
+}
+
+.delete-user {
+  background: #423d5c;
+  color: #e35b5b;
+  padding: 5px;
+}
+
+.ban-user:hover {
+  background: #b13939;
+}
+
+.delete-user:hover {
+  background: #262334;
+}
+
+.ban-status {
+  font-size: 12px;
+  margin-top: 10px;
+  width: 100%;
 }
