@@ -1,3 +1,12 @@
+// get element of id
+function getElementOfId(elements, prefix, id) {
+  for (let i = 0; i < elements.length; i++) {
+    if ($(elements[i]).hasClass(prefix + id)) {
+      return $(elements[i]);
+    }
+  }
+}
+
 // get user admin level
 fetch("/api/user")
   .then(response => response.json())
@@ -104,6 +113,8 @@ fetch("/api/user")
             dateCreated
               .text(formatDate(showData[i].dateCreated))
               .addClass(`userId${i + 1}`);
+            banUser.addClass(`userId${i + 1}`);
+            banStatus.addClass(`userId${i + 1}`);
     
             // set user admin level
             switch(showData[i].adminLevel) {
@@ -240,6 +251,156 @@ fetch("/api/user")
             // add to page
             $("#user-info").append(user);
           }
+
+          // elements
+          const banUserFormContainer = $("#ban-user-form-container");
+          const banUserFormUsername = $("#ban-user-form > h1 > span");
+          const hideBanForm = $("#hide-ban-form");
+          const submitBanForm = $("#submit-ban-form");
+          const banReason = $("#ban-reason");
+          const banExpirationDays = $("#ban-expiration-days");
+          const banExpirationHours = $("#ban-expiration-hours");
+          const banExpirationMinutes = $("#ban-expiration-minutes");
+
+          // user in ban form tracker
+          let banFormUser;
+          
+          // ban button form
+          $(".ban-user").click(e => {
+            e.preventDefault();
+
+            // get id
+            let id;
+    
+            const classList = $(e.target).attr('class').split(/\s+/);
+    
+            $.each(classList, (i, className) => {
+              if (className.includes("userId")) {
+                id = className.substr(6, className.length - 6);
+              }
+            });
+            
+            banFormUser = id - 1;
+
+            // display ban form
+            $("#ban-user-form-username").text(showData[id - 1].username);
+            $("#ban-user-form-container").css("display", "flex");
+          });
+
+          // hide ban page
+          hideBanForm.click(() => {
+            banUserFormContainer.hide();
+          });
+
+          // submit ban request
+          submitBanForm.click(e => {
+            e.preventDefault();
+
+            // disable button and inputs
+            banReason.attr("disabled", true);
+            banExpirationDays.attr("disabled", true);
+            banExpirationHours.attr("disabled", true);
+            banExpirationMinutes.attr("disabled", true);
+            submitBanForm
+              .attr("disabled", true)
+              .addClass("button-disabled")
+              .removeClass("button-enabled");
+
+            // loading animation
+            const loadingAnimation = new LoadingAnimation(submitBanForm);
+            loadingAnimation.start();
+
+            // get data
+            let data = {};
+
+            data.username = banUserFormUsername.text();
+
+            if (banReason.val()) {
+              data.banReason = banReason.val();
+            }
+
+            // calculate ban expiration
+            const secondsDelay = (
+              (isNaN(parseFloat(banExpirationDays.val())) ? 0 : parseFloat(banExpirationDays.val()) * 24 * 60 * 60) +
+              (isNaN(parseFloat(banExpirationHours.val())) ? 0 : parseFloat(banExpirationHours.val()) * 60 * 60) +
+              (isNaN(parseFloat(banExpirationMinutes.val())) ? 0 : parseFloat(banExpirationMinutes.val()) * 60)
+            );
+
+            if (secondsDelay > 0) {
+              const currentDate = new Date();
+  
+              data.banExpiration = new Date(currentDate.setSeconds(currentDate.getSeconds() + secondsDelay));
+            }
+
+            fetch("/api/ban", {
+              method: "POST",
+              body: JSON.stringify(data),
+              headers: {
+                "Content-Type": "application/json"
+              }
+            })
+            .then(response => response.json())
+            .then(response => {
+              banUserFormContainer.hide();
+              loadingAnimation.end();
+
+              // enable buttons and inputs
+              banReason.attr("disabled", false);
+              banExpirationDays.attr("disabled", false);
+              banExpirationHours.attr("disabled", false);
+              banExpirationMinutes.attr("disabled", false);
+              submitBanForm
+                .attr("disabled", false)
+                .addClass("button-enabled")
+                .removeClass("button-disabled");
+
+              // respons status
+              if (response.status === "success") {
+                const successMsg = new HeaderMessage("User successfully banned.", "green", 2);
+                successMsg.display();
+
+                // update data
+                showData[banFormUser].isBanned = true;
+
+                if (data.banReason) {
+                  showData[banFormUser].banReason = data.banReason;
+                }
+
+                if (data.banExpiration) {
+                  showData[banFormUser].banExpiration = data.banExpiration;
+                }
+
+                // update user display
+                const banUser = getElementOfId($(".ban-user"), "userId", banFormUser + 1);
+                banUser.text("Unban Account");
+
+                const banStatus = getElementOfId($(".ban-status"), "userId", banFormUser + 1);
+
+                if (data.banExpiration) {
+                  banStatus.text(`User banned until ${formatDate(data.banExpiration)}.`);
+                } else {
+                  banStatus.text("User banned indefinitely.");
+                }
+              } else {
+                let errorMsg;
+                switch(response.reason) {
+                  case "invalid user":
+                    errorMsg = new HeaderMessage("Error: Invalid user.", "red", 2);
+                    break;
+                  case "invalid data":
+                    errorMsg = new HeaderMessage("Error: Invalid data.", "red", 2);
+                    break;
+                  case "action prohibited":
+                    errorMsg = new HeaderMessage("Error: You don't have authorization to complete this action.", "red", 2);
+                    break;
+                  default:
+                    errorMsg = new HeaderMessage("Error: An unknown error occurred.", "red", 2);
+                    break;
+                }
+                errorMsg.display();
+              }
+            });
+          });
     
           // mobile friendly
           fitMobile();

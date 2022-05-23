@@ -83,6 +83,32 @@
     <div id="user-info">
       <div id="loading-animation"></div>
     </div>
+
+    <div id="ban-user-form-container">
+      <div id="ban-user-form">
+        <h2 id="hide-ban-form">X</h2>
+        
+        <h1>Ban Account: <span id="ban-user-form-username"></span></h1>
+        <p>This user won't have access to the chat or any other pages of the main site until they are unbanned.</p>
+        
+        <label for="ban-reason">Ban Reason:</label>
+        <textarea id="ban-reason"></textarea>
+        
+        <label>Ban Expiration:</label>
+        <div id="ban-expiration">
+          <input type="number" id="ban-expiration-days" placeholder="Days" />
+          <input type="number" id="ban-expiration-hours" placeholder="Hours" />
+          <input type="number" id="ban-expiration-minutes" placeholder="Minutes" />
+          <p>*Leave blank for indefinite ban.</p>
+        </div>
+          
+        <button id="submit-ban-form" class="button-enabled">Ban Account</button>
+      </div>
+    </div>
+    
+    <div id="delete-user-form">
+      
+    </div>
   </main>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

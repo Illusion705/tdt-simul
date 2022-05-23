@@ -95,7 +95,7 @@ input[disabled] {
   width: 100vw;
   position: fixed;
   background: #262334;
-  z-index: 19;
+  z-index: 18;
 }
 
 .edit {
@@ -275,4 +275,101 @@ input[disabled] {
   font-size: 12px;
   margin-top: 10px;
   width: 100%;
+}
+
+#ban-user-form-container {
+  position: fixed;
+  z-index: 19;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+#ban-user-form {
+  background: #3e405e;
+  width: 500px;
+  padding: 10px;
+  border-radius: 15px;
+  border: 1px solid #6e7e96;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+@media (max-width: 500px) {
+  #ban-user-form {
+    width: 85vw;
+  }
+}
+
+#ban-user-form > h1 > span {
+  color: #6282a8;
+}
+
+#ban-user-form > p {
+  color: #b3bad1;
+  text-align: center;
+  margin-top: 10px;
+}
+
+#ban-user-form > label {
+  color: #6282a8;
+  width: 100%;
+  margin-top: 10px;
+}
+
+#ban-user-form > h1 {
+  text-align: center;
+}
+
+#ban-reason {
+  width: 90%;
+  height: 100px;
+  margin-top: 5px;
+  resize: none;
+}
+
+#ban-reason, #ban-expiration-days, #ban-expiration-hours, #ban-expiration-minutes {
+  background: #262334;
+  color: #e0e0e0;
+  padding: 5px;
+  border: 1px solid #423d5c;
+  border-radius: 3px;
+  transition: background 500ms, color 500ms, box-shadow 500ms;
+  font-size: 13px;
+}
+
+#ban-reason:focus, #ban-expiration-days:focus, #ban-expiration-hours:focus, #ban-expiration-minutes:focus {
+  background: #e0e0e0;
+  color: #262334;
+  border: 1px solid #334152;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(172, 217, 232, .25);
+}
+
+#ban-expiration-days, #ban-expiration-hours, #ban-expiration-minutes {
+  width: 65px;
+}
+
+#ban-expiration {
+  width: 90%;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-left: -15px;
+}
+
+#ban-expiration > p {
+  font-size: 12px;
+}
+
+#hide-ban-form {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  color: #828b97;
+  user-select: none;
+  cursor: pointer;
 }

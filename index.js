@@ -27,15 +27,26 @@ function checkBanned(req, res, next) {
   const urlStart = req.originalUrl.split("/")[1];
   
   if (req.user && req.user.isBanned && req.originalUrl !== "/banned" && req.originalUrl !== "/logout" && urlStart !== "public" && urlStart !== "api") {
-    res.render("banned.ejs");
+    if (req.user.banExpiration < Date.now()) {
+      // remove user ban
+      req.user.isBanned = false;
+      req.user.banReason = undefined;
+      req.user.banExpiration = undefined;
 
-    Alert.findOne({ id: req.user.notifications[req.user.notifications.length - 1] })
-    .then(alert => {
-      alert.isSeen = true,
-      alert.isConfirmed = true
-
-      alert.save();
-    });
+      req.user.save();
+      
+      next();
+    } else {
+      res.render("banned.ejs");
+  
+      Alert.findOne({ id: req.user.notifications[req.user.notifications.length - 1] })
+      .then(alert => {
+        alert.isSeen = true,
+        alert.isConfirmed = true
+  
+        alert.save();
+      });
+    }
   } else {
     next();
   }

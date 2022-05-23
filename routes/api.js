@@ -110,7 +110,7 @@ router.get("/notifications", async (req, res) => {
       const notificationInfo = user.notifications[i];
 
       if (notificationInfo.notifType === "alert") {
-        await Alert.findOne({ id: notificationInfo.id })
+        await Alert.findOne({ alertId: notificationInfo.notifId })
           .then(alert => {
             notifications.push({
               type: "alert",
@@ -149,12 +149,13 @@ router.post("/alert", async (req, res) => {
 
 router.post("/ban", async (req, res) => {
   if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
-    if (typeof req.body.username === "string" && typeof req.body.banReason === "string") {
+    if (typeof req.body.username === "string") {
       if (req.body.banReason) {
         // create alert
         if (await createAlert(req.body.banReason, req.body.username) !== "success") {
           // return error
           res.json({ status: "failed", reason: "invalid user"});
+          return;
         }
       } 
   
@@ -167,10 +168,14 @@ router.post("/ban", async (req, res) => {
             if (req.body.banReason) {
               user.banReason = req.body.banReason;
             } else if (user.banReason) {
-              delete user.banReason;
+              user.banReason = undefined;
             }
-            
-            user.banExpiration = req.body.banExpiration;
+
+            if (req.body.banExpiration) {
+              user.banExpiration = req.body.banExpiration;
+            } else {
+              user.banExpiration = undefined;
+            }
     
             await user.save();
     
