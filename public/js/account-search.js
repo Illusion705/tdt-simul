@@ -114,6 +114,7 @@ fetch("/api/user")
               .text(formatDate(showData[i].dateCreated))
               .addClass(`userId${i + 1}`);
             banUser.addClass(`userId${i + 1}`);
+            deleteUser.addClass(`userId${i + 1}`);
             banStatus.addClass(`userId${i + 1}`);
     
             // set user admin level
@@ -254,19 +255,31 @@ fetch("/api/user")
 
           // elements
           const banUserFormContainer = $("#ban-user-form-container");
+          const unbanUserFormContainer = $("#unban-user-form-container");
+          const deleteUserFormContainer = $("#delete-user-form-container");
+          const undeleteUserFormContainer = $("#undelete-user-form-container");
           const banUserFormUsername = $("#ban-user-form > h1 > span");
+          const unbanUserFormUsername = $("#unban-user-form > h1 > span");
+          const deleteUserFormUsername = $("#delete-user-form > h1 > span");
+          const undeleteUserFormUsername = $("#undelete-user-form > h1 > span");
           const hideBanForm = $("#hide-ban-form");
+          const hideUnbanForm = $("#hide-unban-form");
+          const hideDeleteForm = $("#hide-delete-form");
+          const hideUndeleteForm = $("#hide-undelete-form");
           const submitBanForm = $("#submit-ban-form");
+          const submitUnbanForm = $("#submit-unban-form");
+          const submitDeleteForm = $("#submit-delete-form");
+          const submitUndeleteForm = $("#submit-undelete-form");
           const banReason = $("#ban-reason");
           const banExpirationDays = $("#ban-expiration-days");
           const banExpirationHours = $("#ban-expiration-hours");
           const banExpirationMinutes = $("#ban-expiration-minutes");
 
-          // user in ban form tracker
+          // ban form
           let banFormUser;
+          let unbanFormUser;
           
-          // ban button form
-          $(".ban-user").click(e => {
+          function banUserClick(e) {
             e.preventDefault();
 
             // get id
@@ -279,21 +292,97 @@ fetch("/api/user")
                 id = className.substr(6, className.length - 6);
               }
             });
-            
-            banFormUser = id - 1;
 
-            // display ban form
-            $("#ban-user-form-username").text(showData[id - 1].username);
-            $("#ban-user-form-container").css("display", "flex");
-          });
+            // show form
+            if (!showData[id - 1].isBanned) {
+              banFormUser = id - 1;
+              
+              // display ban form
+              banUserFormUsername.text(showData[id - 1].username);
+              banUserFormContainer.css("display", "flex");
+            } else {
+              unbanFormUser = id - 1;
+              
+              // display unban form
+              unbanUserFormUsername.text(showData[id - 1].username);
+              unbanUserFormContainer.css("display", "flex");
+            }
+          }
+
+          $(".ban-user").unbind("click");
+          $(".ban-user").click(banUserClick);
+
+          // delete form
+          let deleteFormUser;
+          let undeleteFormUser;
+          
+          function deleteUserClick(e) {
+            e.preventDefault();
+
+            // get id
+            let id;
+    
+            const classList = $(e.target).attr('class').split(/\s+/);
+    
+            $.each(classList, (i, className) => {
+              if (className.includes("userId")) {
+                id = className.substr(6, className.length - 6);
+              }
+            });
+
+            // show form
+            if (!showData[id - 1].isDeleted) {
+              deleteFormUser = id - 1;
+              
+              // display ban form
+              deleteUserFormUsername.text(showData[id - 1].username);
+              deleteUserFormContainer.css("display", "flex");
+            } else {
+              undeleteFormUser = id - 1;
+              
+              // display unban form
+              undeleteUserFormUsername.text(showData[id - 1].username);
+              undeleteUserFormContainer.css("display", "flex");
+            }
+          }
+          
+          $(".delete-user").unbind("click");
+          $(".delete-user").click(deleteUserClick);
 
           // hide ban page
-          hideBanForm.click(() => {
+          function hideBanFormClick() {
             banUserFormContainer.hide();
-          });
+          }
+
+          hideBanForm.unbind("click");
+          hideBanForm.click(hideBanFormClick);
+
+          // hide unban page
+          function hideUnbanFormClick() {
+            unbanUserFormContainer.hide();
+          }
+          
+          hideUnbanForm.unbind("click");
+          hideUnbanForm.click(hideUnbanFormClick);
+
+          // hide delete page
+          function hideDeleteFormClick() {
+            deleteUserFormContainer.hide();
+          }
+          
+          hideDeleteForm.unbind("click");
+          hideDeleteForm.click(hideDeleteFormClick);
+
+          // hide delete page
+          function hideUndeleteFormClick() {
+            undeleteUserFormContainer.hide();
+          }
+          
+          hideUndeleteForm.unbind("click");
+          hideUndeleteForm.click(hideUndeleteFormClick);
 
           // submit ban request
-          submitBanForm.click(e => {
+          function submitBanFormClick(e) {
             e.preventDefault();
 
             // disable button and inputs
@@ -356,7 +445,7 @@ fetch("/api/user")
 
               // respons status
               if (response.status === "success") {
-                const successMsg = new HeaderMessage("User successfully banned.", "green", 2);
+                const successMsg = new HeaderMessage("Account successfully banned.", "green", 2);
                 successMsg.display();
 
                 // update data
@@ -400,7 +489,192 @@ fetch("/api/user")
                 errorMsg.display();
               }
             });
-          });
+          }
+
+          submitBanForm.unbind("click");
+          submitBanForm.click(submitBanFormClick);
+
+          // submit unban request
+          function submitUnbanFormClick(e) {
+            e.preventDefault();
+
+            // loading animation
+            const loadingAnimation = new LoadingAnimation(submitUnbanForm);
+            loadingAnimation.start();
+            
+            fetch("/api/unban", {
+              method: "POST",
+              body: JSON.stringify({
+                username: unbanUserFormUsername.text()
+              }),
+              headers: {
+                "Content-Type": "application/json"
+              }
+            })
+            .then(response => response.json())
+            .then(response => {
+              unbanUserFormContainer.hide();
+              loadingAnimation.end();
+
+              // respons status
+              if (response.status === "success") {
+                const successMsg = new HeaderMessage("Account successfully unbanned.", "green", 2);
+                successMsg.display();
+
+                // update data
+                showData[unbanFormUser].isBanned = false;
+                showData[unbanFormUser].banReason = undefined;
+                showData[unbanFormUser].banExpiration = undefined;
+
+                // update user display
+                const banUser = getElementOfId($(".ban-user"), "userId", banFormUser + 1);
+                banUser.text("Ban Account");
+
+                const banStatus = getElementOfId($(".ban-status"), "userId", banFormUser + 1);
+                banStatus.text(null);
+              } else {
+                let errorMsg;
+                switch(response.reason) {
+                  case "invalid user":
+                    errorMsg = new HeaderMessage("Error: Invalid user.", "red", 2);
+                    break;
+                  case "invalid data":
+                    errorMsg = new HeaderMessage("Error: Invalid data.", "red", 2);
+                    break;
+                  case "action prohibited":
+                    errorMsg = new HeaderMessage("Error: You don't have authorization to complete this action.", "red", 2);
+                    break;
+                  default:
+                    errorMsg = new HeaderMessage("Error: An unknown error occurred.", "red", 2);
+                    break;
+                }
+                errorMsg.display();
+              }
+            });
+          }
+
+          submitUnbanForm.unbind("click");
+          submitUnbanForm.click(submitUnbanFormClick);
+
+          // submit delete request
+          function submitDeleteFormClick(e) {
+            e.preventDefault();
+
+            // loading animation
+            const loadingAnimation = new LoadingAnimation(submitDeleteForm);
+            loadingAnimation.start();
+
+            fetch("/api/delete_account", {
+              method: "POST",
+              body: JSON.stringify({
+                username: deleteUserFormUsername.text()
+              }),
+              headers: {
+                "Content-Type": "application/json"
+              }
+            })
+            .then(response => response.json())
+            .then(response => {
+              deleteUserFormContainer.hide();
+              loadingAnimation.end();
+
+              // respons status
+              if (response.status === "success") {
+                const successMsg = new HeaderMessage("Account successfully deleted.", "green", 2);
+                successMsg.display();
+
+                // update data
+                showData[deleteFormUser].isDeleted = true;
+
+                // update user display
+                const deleteUser = getElementOfId($(".delete-user"), "userId", deleteFormUser + 1);
+                deleteUser.text("Undelete Account");
+
+                const username = getElementOfId($(".user-username"), "userId", deleteFormUser + 1);
+                username.css("color", "red");
+              } else {
+                let errorMsg;
+                switch(response.reason) {
+                  case "invalid user":
+                    errorMsg = new HeaderMessage("Error: Invalid user.", "red", 2);
+                    break;
+                  case "invalid data":
+                    errorMsg = new HeaderMessage("Error: Invalid data.", "red", 2);
+                    break;
+                  case "action prohibited":
+                    errorMsg = new HeaderMessage("Error: You don't have authorization to complete this action.", "red", 2);
+                    break;
+                  default:
+                    errorMsg = new HeaderMessage("Error: An unknown error occurred.", "red", 2);
+                    break;
+                }
+                errorMsg.display();
+              }
+            });
+          }
+
+          submitDeleteForm.unbind("click");
+          submitDeleteForm.click(submitDeleteFormClick);
+
+          // submit delete request
+          function submitUndeleteFormClick(e) {
+            e.preventDefault();
+
+            // loading animation
+            const loadingAnimation = new LoadingAnimation(submitUndeleteForm);
+            loadingAnimation.start();
+
+            fetch("/api/undelete_account", {
+              method: "POST",
+              body: JSON.stringify({
+                username: undeleteUserFormUsername.text()
+              }),
+              headers: {
+                "Content-Type": "application/json"
+              }
+            })
+            .then(response => response.json())
+            .then(response => {
+              undeleteUserFormContainer.hide();
+              loadingAnimation.end();
+
+              // respons status
+              if (response.status === "success") {
+                const successMsg = new HeaderMessage("Account successfully undeleted.", "green", 2);
+                successMsg.display();
+
+                // update data
+                showData[undeleteFormUser].isDeleted = false;
+
+                // update user display
+                const deleteUser = getElementOfId($(".delete-user"), "userId", undeleteFormUser + 1);
+                deleteUser.text("Delete Account");
+
+                const username = getElementOfId($(".user-username"), "userId", undeleteFormUser + 1);
+                username.css("color", "white");
+              } else {
+                let errorMsg;
+                switch(response.reason) {
+                  case "invalid user":
+                    errorMsg = new HeaderMessage("Error: Invalid user.", "red", 2);
+                    break;
+                  case "invalid data":
+                    errorMsg = new HeaderMessage("Error: Invalid data.", "red", 2);
+                    break;
+                  case "action prohibited":
+                    errorMsg = new HeaderMessage("Error: You don't have authorization to complete this action.", "red", 2);
+                    break;
+                  default:
+                    errorMsg = new HeaderMessage("Error: An unknown error occurred.", "red", 2);
+                    break;
+                }
+                errorMsg.display();
+              }
+            });
+          }
+
+          submitUndeleteForm.unbind("click");
+          submitUndeleteForm.click(submitUndeleteFormClick);
     
           // mobile friendly
           fitMobile();

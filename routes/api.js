@@ -193,6 +193,83 @@ router.post("/ban", async (req, res) => {
   }
 });
 
+router.post("/unban", async (req, res) => {
+  if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
+    if (typeof req.body.username === "string") {
+      // find user
+      User.findOne({ username: req.body.username.toLowerCase() })
+        .then(async user => {
+          if (user) {
+            user.isBanned = false;
+            user.banReason = undefined;
+            user.banExpiration = undefined;
+
+            await user.save();
+
+            // return successful
+            res.json({ status: "success" });
+          } else {
+            res.json({ status: "failed", reason: "invalid user" });
+          }
+        });
+    } else {
+      res.json({ status: "failed", reason: "invalid data" });
+    }
+  } else {
+    res.json({ status: "failed", reason: "action prohibited" });
+  }
+});
+
+router.post("/delete_account", (req, res) => {
+  if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
+    if (typeof req.body.username === "string") {
+      // find user
+      User.findOne({ username: req.body.username.toLowerCase() })
+        .then(async user => {
+          if (user) {
+            user.isDeleted = true;
+
+            await user.save();
+
+            // return successful
+            res.json({ status: "success" });
+          } else {
+            res.json({ status: "failed", reason: "invalid user" });
+          }
+        });
+    } else {
+      res.json({ status: "failed", reason: "invalid data" });
+    }
+  } else {
+    res.json({ status: "failed", reason: "action prohibited" });
+  }
+});
+
+router.post("/undelete_account", (req, res) => {
+  if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
+    if (typeof req.body.username === "string") {
+      // find user
+      User.findOne({ username: req.body.username.toLowerCase() })
+        .then(async user => {
+          if (user) {
+            user.isDeleted = false;
+
+            await user.save();
+
+            // return successful
+            res.json({ status: "success" });
+          } else {
+            res.json({ status: "failed", reason: "invalid user" });
+          }
+        });
+    } else {
+      res.json({ status: "failed", reason: "invalid data" });
+    }
+  } else {
+    res.json({ status: "failed", reason: "action prohibited" });
+  }
+});
+
 router.post("/unban_request", async (req, res) => {
   if (req.isAuthenticated() && req.user.isBanned && !req.user.isDeleted) {
     if (typeof req.body.message === "string") {

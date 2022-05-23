@@ -277,7 +277,7 @@ input[disabled] {
   width: 100%;
 }
 
-#ban-user-form-container {
+#ban-user-form-container, #unban-user-form-container, #delete-user-form-container, #undelete-user-form-container {
   position: fixed;
   z-index: 19;
   display: none;
@@ -287,7 +287,7 @@ input[disabled] {
   width: 100vw;
 }
 
-#ban-user-form {
+#ban-user-form, #unban-user-form, #delete-user-form, #undelete-user-form {
   background: #3e405e;
   width: 500px;
   padding: 10px;
@@ -300,16 +300,16 @@ input[disabled] {
 }
 
 @media (max-width: 500px) {
-  #ban-user-form {
+  #ban-user-form, #unban-user-form {
     width: 85vw;
   }
 }
 
-#ban-user-form > h1 > span {
+#ban-user-form > h1 > span, #unban-user-form > h1 > span, #delete-user-form > h1 > span, #undelete-user-form > h1 > span  {
   color: #6282a8;
 }
 
-#ban-user-form > p {
+#ban-user-form > p, #unban-user-form > p, #delete-user-form > p, #undelete-user-form > p {
   color: #b3bad1;
   text-align: center;
   margin-top: 10px;
@@ -321,7 +321,7 @@ input[disabled] {
   margin-top: 10px;
 }
 
-#ban-user-form > h1 {
+#ban-user-form > h1, #unban-user-form > h1, #delete-user-form > h1, #undelete-user-form > h1 {
   text-align: center;
 }
 
@@ -365,11 +365,15 @@ input[disabled] {
   font-size: 12px;
 }
 
-#hide-ban-form {
+#hide-ban-form, #hide-unban-form, #hide-delete-form, #hide-undelete-form {
   position: absolute;
   top: 5px;
   right: 10px;
   color: #828b97;
   user-select: none;
   cursor: pointer;
+}
+
+#submit-unban-form, #submit-delete-form, #submit-undelete-form {
+  margin-top: 20px;
 }
