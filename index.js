@@ -17,7 +17,13 @@ const app = express();
 function checkDeleted(req, res, next) {
   if (req.user && req.user.isDeleted) {
     req.logout();
-    res.redirect("/");
+
+    const urlStart = req.originalUrl.split("/")[1];
+    if (urlStart !== "public" && urlStart !== "api") {
+      res.redirect("/");
+    } else {
+      next();
+    }
   } else {
     next();
   }

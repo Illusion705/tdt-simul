@@ -163,24 +163,28 @@ router.post("/ban", async (req, res) => {
       User.findOne({ username: req.body.username.toLowerCase() })
         .then(async user => {
           if (user) {
-            user.isBanned = true;
+            if (!user.adminLevel || req.user.adminLevel === 2) {
+              user.isBanned = true;
+    
+              if (req.body.banReason) {
+                user.banReason = req.body.banReason;
+              } else if (user.banReason) {
+                user.banReason = undefined;
+              }
   
-            if (req.body.banReason) {
-              user.banReason = req.body.banReason;
-            } else if (user.banReason) {
-              user.banReason = undefined;
-            }
-
-            if (req.body.banExpiration) {
-              user.banExpiration = req.body.banExpiration;
+              if (req.body.banExpiration) {
+                user.banExpiration = req.body.banExpiration;
+              } else {
+                user.banExpiration = undefined;
+              }
+      
+              await user.save();
+      
+              // return successful
+              res.json({ status: "success" });
             } else {
-              user.banExpiration = undefined;
+              res.json({ status: "failed", reason: "action prohibited" });
             }
-    
-            await user.save();
-    
-            // return successful
-            res.json({ status: "success" });
           } else {
             res.json({ status: "failed", reason: "invalid user" });
           }
@@ -200,14 +204,18 @@ router.post("/unban", async (req, res) => {
       User.findOne({ username: req.body.username.toLowerCase() })
         .then(async user => {
           if (user) {
-            user.isBanned = false;
-            user.banReason = undefined;
-            user.banExpiration = undefined;
-
-            await user.save();
-
-            // return successful
-            res.json({ status: "success" });
+            if (!user.adminLevel || req.user.adminLevel === 2) {
+              user.isBanned = false;
+              user.banReason = undefined;
+              user.banExpiration = undefined;
+  
+              await user.save();
+  
+              // return successful
+              res.json({ status: "success" });
+            } else {
+              res.json({ status: "failed", reason: "action prohibited" });
+            }
           } else {
             res.json({ status: "failed", reason: "invalid user" });
           }
@@ -227,12 +235,16 @@ router.post("/delete_account", (req, res) => {
       User.findOne({ username: req.body.username.toLowerCase() })
         .then(async user => {
           if (user) {
-            user.isDeleted = true;
-
-            await user.save();
-
-            // return successful
-            res.json({ status: "success" });
+            if (!user.adminLevel || req.user.adminLevel === 2) {
+              user.isDeleted = true;
+  
+              await user.save();
+  
+              // return successful
+              res.json({ status: "success" });
+            } else {
+              res.json({ status: "failed", reason: "action prohibited" });
+            }
           } else {
             res.json({ status: "failed", reason: "invalid user" });
           }
@@ -252,12 +264,16 @@ router.post("/undelete_account", (req, res) => {
       User.findOne({ username: req.body.username.toLowerCase() })
         .then(async user => {
           if (user) {
-            user.isDeleted = false;
-
-            await user.save();
-
-            // return successful
-            res.json({ status: "success" });
+            if (!user.adminLevel || req.user.adminLevel === 2) {
+              user.isDeleted = false;
+  
+              await user.save();
+  
+              // return successful
+              res.json({ status: "success" });
+            } else {
+              res.json({ status: "failed", reason: "action prohibited" });
+            }
           } else {
             res.json({ status: "failed", reason: "invalid user" });
           }
@@ -381,6 +397,29 @@ router.post("/update_user_data", async (req, res) => {
   }
 });
 
+router.post("/admin_level", (req, res) => {
+  if (req.isAuthenticated() && req.user.adminLevel === 2 && !req.user.isBanned && !req.user.isDeleted) {
+    if (typeof req.body.username === "string" && ([0, 1, 2]).includes(req.body.adminLevel)) {
+      User.findOne({ username: req.body.username.toLowerCase() })
+        .then(async user => {
+          if (user) {
+            user.adminLevel = req.body.adminLevel;
+
+            await user.save();
+
+            res.json({ status: "success" });
+          } else {
+            res.json({ status: "failed", reason: "invalid user" });
+          }
+        });
+    } else {
+      res.json({ status: "failed", reason: "invalid data" });
+    }
+  } else {
+    res.json({ status: "failed", reason: "action prohibited" });
+  }
+});
+
 router.get("/users", (req, res) => {
   if (req.isAuthenticated() && req.user.adminLevel && !req.user.isBanned && !req.user.isDeleted) {
     User.find()
@@ -409,7 +448,7 @@ router.get("/users", (req, res) => {
   } else {
     res.json({ message: "access denied" });
   }
-})
+});
 
 // export router
 module.exports = router;

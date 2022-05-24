@@ -98,6 +98,7 @@ fetch("/api/user")
             const banUser = user.find(".ban-user");
             const deleteUser = user.find(".delete-user");
             const banStatus = user.find(".ban-status");
+            const saveUserInfo = user.find(".save-user-info");
             
             // add user info
             user.addClass(`userId${i + 1}`);
@@ -116,6 +117,11 @@ fetch("/api/user")
             banUser.addClass(`userId${i + 1}`);
             deleteUser.addClass(`userId${i + 1}`);
             banStatus.addClass(`userId${i + 1}`);
+            adminLevel0.addClass(`userId${i + 1}`);
+            adminLevel1.addClass(`userId${i + 1}`);
+            adminLevel2.addClass(`userId${i + 1}`);
+            verificationStatus.addClass(`userId${i + 1}`);
+            saveUserInfo.addClass(`userId${i + 1}`);
     
             // set user admin level
             switch(showData[i].adminLevel) {
@@ -651,7 +657,7 @@ fetch("/api/user")
                 deleteUser.text("Delete Account");
 
                 const username = getElementOfId($(".user-username"), "userId", undeleteFormUser + 1);
-                username.css("color", "white");
+                username.css("color", "#e0e0e0");
               } else {
                 let errorMsg;
                 switch(response.reason) {
@@ -675,6 +681,254 @@ fetch("/api/user")
 
           submitUndeleteForm.unbind("click");
           submitUndeleteForm.click(submitUndeleteFormClick);
+
+          // save button show
+          function updateSaveButtons() {
+            for (let i = 0; i < showData.length; i++) {
+              let showButton = false;
+              
+              const username = getElementOfId($(".user-username"), "userId", i + 1).val();
+              const firstName = getElementOfId($(".user-first-name"), "userId", i + 1).val();
+              const lastName = getElementOfId($(".user-last-name"), "userId", i + 1).val();
+              const adminLevel0 = getElementOfId($(".admin-level0"), "userId", i + 1).css("opacity");
+              const adminLevel1 = getElementOfId($(".admin-level1"), "userId", i + 1).css("opacity");
+              const adminLevel2 = getElementOfId($(".admin-level2"), "userId", i + 1).css("opacity");
+              const verificationStatus = getElementOfId($(".verification-status"), "userId", i + 1).val();
+              const saveUserInfo = getElementOfId($(".save-user-info"), "userId", i + 1);
+
+              if (showData[i].username !== username || showData[i].firstName !== firstName || showData[i].lastName !== lastName) {
+                showButton = true;
+              }
+
+              if ((showData[i].adminLevel === 0 && adminLevel0 !== "1") || (showData[i].adminLevel === 1 && adminLevel1 !== "1") || (showData[i].adminLevel === 2 && adminLevel2 !== "1")) {
+                showButton = true;
+              }
+
+              if (showData[i].verificationStatus !== verificationStatus) {
+                showButton = true;
+              }
+
+              // show/hide button
+              if (showButton) {
+                saveUserInfo.css("display", "flex");
+              } else {
+                saveUserInfo.hide();
+              }
+            }
+          }
+
+          $(".user-username").on("input propertychange paste", updateSaveButtons);
+          $(".user-first-name").on("input propertychange paste", updateSaveButtons);
+          $(".user-first-name").on("input propertychange paste", updateSaveButtons);
+          $(".admin-level0").click(updateSaveButtons);
+          $(".admin-level1").click(updateSaveButtons);
+          $(".admin-level2").click(updateSaveButtons);
+          $(".verification-status").change(updateSaveButtons);
+          $(".edit").click(updateSaveButtons);
+
+          // save button click
+          function saveUserInfoClick(e) {
+            e.preventDefault();
+
+            // start loading animation
+            const loadingAnimation = new LoadingAnimation($(e.target));
+            loadingAnimation.start();
+
+            // get id
+            let id;
+    
+            const classList = $(e.target).attr('class').split(/\s+/);
+    
+            $.each(classList, (i, className) => {
+              if (className.includes("userId")) {
+                id = className.substr(6, className.length - 6);
+              }
+            });
+
+            // get data
+            const username = getElementOfId($(".user-username"), "userId", id).val();
+            const firstName = getElementOfId($(".user-first-name"), "userId", id).val();
+            const lastName = getElementOfId($(".user-last-name"), "userId", id).val();
+            const verificationStatus = getElementOfId($(".verification-status"), "userId", id).val();
+            const user = showData[id - 1].username;
+
+            const adminLevel0 = getElementOfId($(".admin-level0"), "userId", id).css("opacity");
+            const adminLevel1 = getElementOfId($(".admin-level1"), "userId", id).css("opacity");
+            const adminLevel2 = getElementOfId($(".admin-level2"), "userId", id).css("opacity");
+
+            let adminLevel;
+
+            if (adminLevel0 === "1") {
+              adminLevel = 0;
+            } else if (adminLevel1 === "1") {
+              adminLevel = 1;
+            } else if (adminLevel2 === "1") {
+              adminLevel = 2;
+            }
+
+            // send data
+            fetch("/api/update_user_data", {
+              method: "POST",
+              body: JSON.stringify({
+                username: user,
+                newUsername: username,
+                firstName: firstName,
+                lastName: lastName
+              }),
+              headers: {
+                "Content-Type": "application/json"
+              }
+            })
+            .then(response => response.json())
+            .then(response => {
+              if (response.status === "success") {
+                // update data
+                showData[id - 1].username = username;
+                showData[id - 1].firstName = firstName;
+                showData[id - 1].lastName = lastName;
+
+                // update save buttons
+                updateSaveButtons();
+                
+                // verification status request
+                fetch("/api/verification_status", {
+                  method: "POST",
+                  body: JSON.stringify({
+                    username: user,
+                    verificationStatus: verificationStatus
+                  }),
+                  headers: {
+                    "Content-Type": "application/json"
+                  }
+                })
+                .then(response => response.json())
+                .then(response => {
+                  if (response.status === "success") {
+                    // update data
+                    showData[id - 1].verificationStatus = verificationStatus;
+
+                    // update save buttons
+                    updateSaveButtons();
+                    
+                    if (userAdminLevel === 2) {
+                      // admin level request
+                      fetch("/api/admin_level", {
+                        method: "POST",
+                        body: JSON.stringify({
+                          username: user,
+                          adminLevel: adminLevel
+                        }),
+                        headers: {
+                          "Content-Type": "application/json"
+                        }
+                      })
+                      .then(response => response.json())
+                      .then(response => {
+                        // end loading animation
+                        loadingAnimation.end();
+
+                        // update save buttons
+                        updateSaveButtons();
+                        
+                        if (response.status === "success") {
+                          // update data
+                          showData[id - 1].adminLevel = adminLevel;
+
+                          // update save buttons
+                          updateSaveButtons();
+                          
+                          // success message
+                          const successMsg = new HeaderMessage("User data successfully updated.", "green", 2);
+                          successMsg.display()
+                        } else {
+                          // error message
+                          let errorMsg;
+                          switch(response.reason) {
+                            case "invalid user":
+                              errorMsg = new HeaderMessage("Error: Invalid user.", "red", 2);
+                              break;
+                            case "invalid data":
+                              errorMsg = new HeaderMessage("Error: Invalid data.", "red", 2);
+                              break;
+                            case "action prohibited":
+                              errorMsg = new HeaderMessage("Error: You don't have authorization to complete this action.", "red", 2);
+                              break;
+                            default:
+                              errorMsg = new HeaderMessage("Error: An unknown error occurred.", "red", 2);
+                              break;
+                          }
+                        }
+                      });
+                    } else {
+                      // end loading animation
+                      loadingAnimation.end();
+
+                      // update save buttons
+                      updateSaveButtons();
+
+                      // success message
+                      const successMsg = new HeaderMessage("User data successfully updated.", "green", 2);
+                      successMsg.display()
+                    }
+                  } else {
+                    // end loading animation
+                    loadingAnimation.end();
+
+                    // update save buttons
+                    updateSaveButtons();
+
+                    // error message
+                    let errorMsg;
+                    switch(response.reason) {
+                      case "invalid status":
+                        errorMsg = new HeaderMessage("Error: Invalid status.", "red", 2);
+                        break;
+                      case "invalid user":
+                        errorMsg = new HeaderMessage("Error: Invalid user.", "red", 2);
+                        break;
+                      case "invalid data":
+                        errorMsg = new HeaderMessage("Error: Invalid data.", "red", 2);
+                        break;
+                      case "action prohibited":
+                        errorMsg = new HeaderMessage("Error: You don't have authorization to complete this action.", "red", 2);
+                        break;
+                      default:
+                        errorMsg = new HeaderMessage("Error: An unknown error occurred.", "red", 2);
+                        break;
+                    }
+                    errorMsg.display();
+                  }
+                });
+              } else {
+                // end loading animation
+                loadingAnimation.end();
+
+                // update save buttons
+                updateSaveButtons();
+
+                // error message
+                let errorMsg;
+                switch(response.reason) {
+                  case "invalid user":
+                    errorMsg = new HeaderMessage("Error: Invalid user.", "red", 2);
+                    break;
+                  case "invalid data":
+                    errorMsg = new HeaderMessage("Error: Invalid data.", "red", 2);
+                    break;
+                  case "action prohibited":
+                    errorMsg = new HeaderMessage("Error: You don't have authorization to complete this action.", "red", 2);
+                    break;
+                  default:
+                    errorMsg = new HeaderMessage("Error: An unknown error occurred.", "red", 2);
+                    break;
+                }
+                errorMsg.display();
+              }
+            });
+          }
+
+          $(".save-user-info").unbind("click");
+          $(".save-user-info").click(saveUserInfoClick);
     
           // mobile friendly
           fitMobile();
