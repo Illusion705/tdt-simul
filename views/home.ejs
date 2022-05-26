@@ -12,10 +12,28 @@
   <header></header>
   
   <main>
+    <div id="logged-out-container">
+      <h1>Welcome to Simul</h1>
+      <p>The online community for TDT students to communicate!</p>
   
+      <span>
+        <a href="/register">Register</a> or <a href="/login">Sign In</a> to get started!
+      </span>
+    </div>
+    
+    <div id="account-request-pending">
+      <h1>Waiting for Verification</h1>
+      <p>Your account is waiting approval from an administrator before you can access the chat.</p>
+    </div>
+
+    <div id="account-request-declined">
+      <h1>Account Request Declined</h1>
+      <p>Your account has been declined, so you won't be able to access the chat.</p>
+    </div>
   </main>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="/public/js/main.js"></script>
+  <script src="/public/js/home.js"></script>
 </body>
 </html>

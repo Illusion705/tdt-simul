@@ -1,0 +1,43 @@
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 105px);
+  width: 100vw;
+}
+
+#logged-out-container, #account-request-pending, #account-request-declined {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  display: none;
+}
+
+#logged-out-container > h1, #account-request-pending > h1, #account-request-declined > h1 {
+  font-size: 45px;
+  text-align: center;
+}
+
+#logged-out-container > p, #account-request-pending > p, #account-request-declined > p {
+  font-size: 25px;
+  margin-top: 10px;
+  color: #6282a8;
+  text-align: center;
+}
+
+#logged-out-container > span {
+  font-size: 35px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+#logged-out-container > span > a {
+  padding: 5px;
+  background: #3778e1;
+  border-radius: 10px;
+  transition: background 500ms;
+}
+
+#logged-out-container > span > a:hover {
+  background: #2964c2;
+}

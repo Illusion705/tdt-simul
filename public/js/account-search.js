@@ -12,6 +12,7 @@ fetch("/api/user")
   .then(response => response.json())
   .then(data => {
     const userAdminLevel = data.adminLevel;
+    const userUsername = data.username;
 
     // mobile friendly
     function fitMobile() {
@@ -200,6 +201,19 @@ fetch("/api/user")
 
             if (showData[i].isDeleted) {
               deleteUser.text("Undelete Account")
+            }
+
+            // ban and delete button disabled
+            if (userAdminLevel === 1 && showData[i].adminLevel && showData[i].username !== userUsername) {
+              banUser.attr("disabled", true);
+              banUser.css("cursor", "not-allowed");
+              banUser.css("background", "#e35b5b");
+              banUser.css("opacity", "0.5");
+
+              deleteUser.attr("disabled", true);
+              deleteUser.css("cursor", "not-allowed");
+              deleteUser.css("background", "#423d5c");
+              deleteUser.css("opacity", "0.5");
             }
 
             // ban status
