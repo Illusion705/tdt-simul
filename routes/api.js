@@ -8,6 +8,9 @@ const createAlert = require("../lib/create-alert");
 const User = require("../models/User");
 const Alert = require("../models/Alert");
 const UnbanRequest = require("../models/Unban-Request");
+const Channel = require("../models/Channel");
+const Message = require("../models/Message");
+const Section = require("../models/Section");
 
 // routes
 router.get("/username_status/:username", (req, res) => {
@@ -448,6 +451,30 @@ router.get("/users", (req, res) => {
   } else {
     res.json({ message: "access denied" });
   }
+});
+
+router.post("/create_section", async (req, res) => {
+  if (req.isAuthenticated() && req.user.adminLevel === 2 && !req.user.isBanned && !req.user.isDeleted) {
+    if (typeof req.body.name === "string" && typeof req.body.canSee === "number" && typeof req.body.canPost === "number") {
+      const section = new Section({
+        name: req.body.name,
+        canSee: req.body.canSee,
+        canPost: req.body.canPost
+      });
+
+      await section.save();
+
+      res.json({ status: "success" });
+    } else {
+      res.json({ status: "failed", reason: "invalid data" });
+    }
+  } else {
+    res.json({ status: "failed", reason: "action prohibited" });
+  }
+});
+
+router.post("/create_channel", (req, res) => {
+  
 });
 
 // export router

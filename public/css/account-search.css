@@ -378,15 +378,32 @@ input[disabled] {
   margin-top: 20px;
 }
 
-.save-user-info {
+.save-user-info-enabled {
   padding-top: 5px;
   padding-bottom: 5px;
   margin-top: 15px;
   background: #262334;
-  transition: background 500ms;
+  transition: background 500ms, opacity 500ms;
   display: none;
 }
 
-.save-user-info:hover {
+.save-user-info-enabled:hover {
   background: #423d5c;
+}
+
+.save-user-info-disabled {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 15px;
+  background: #262334;
+  display: none;
+  opacity: 0.5;
+  transition: opacity 500ms;
+  cursor: not-allowed;
+}
+
+.info-error-message {
+  text-align: center;
+  width: 100%;
+  color: red;
 }

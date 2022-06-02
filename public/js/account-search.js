@@ -100,6 +100,7 @@ fetch("/api/user")
             const deleteUser = user.find(".delete-user");
             const banStatus = user.find(".ban-status");
             const saveUserInfo = user.find(".save-user-info");
+            const infoErrorMessage = user.find(".info-error-message");
             
             // add user info
             user.addClass(`userId${i + 1}`);
@@ -123,6 +124,7 @@ fetch("/api/user")
             adminLevel2.addClass(`userId${i + 1}`);
             verificationStatus.addClass(`userId${i + 1}`);
             saveUserInfo.addClass(`userId${i + 1}`);
+            infoErrorMessage.addClass(`userId${i + 1}`);
     
             // set user admin level
             switch(showData[i].adminLevel) {
@@ -697,7 +699,7 @@ fetch("/api/user")
           submitUndeleteForm.click(submitUndeleteFormClick);
 
           // save button show
-          function updateSaveButtons() {
+          async function updateSaveButtons() {
             for (let i = 0; i < showData.length; i++) {
               let showButton = false;
               
@@ -709,6 +711,7 @@ fetch("/api/user")
               const adminLevel2 = getElementOfId($(".admin-level2"), "userId", i + 1).css("opacity");
               const verificationStatus = getElementOfId($(".verification-status"), "userId", i + 1).val();
               const saveUserInfo = getElementOfId($(".save-user-info"), "userId", i + 1);
+              const infoErrorMessage = getElementOfId($(".info-error-message"), "userId", i + 1);
 
               if (showData[i].username !== username || showData[i].firstName !== firstName || showData[i].lastName !== lastName) {
                 showButton = true;
@@ -728,6 +731,38 @@ fetch("/api/user")
               } else {
                 saveUserInfo.hide();
               }
+
+              // enable/disable
+              if ((await verifyUsername(username) === "username valid" || username === showData[i].username) && firstName.length < 21 && lastName.length < 21) {
+                saveUserInfo
+                  .addClass("save-user-info-enabled")
+                  .removeClass("save-user-info-disabled");
+
+                infoErrorMessage.text(null);
+              } else {
+                saveUserInfo
+                  .addClass("save-user-info-disabled")
+                  .removeClass("save-user-info-enabled");
+
+                let messageText;
+
+                switch(await verifyUsername(username)) {
+                  case "no username":
+                    messageText = "The username cannot be blank.";
+                    break;
+                  case "invalid length":
+                    messageText = "The username must be 3 to 20 characters."
+                    break;
+                  case "invalid character":
+                    messageText = "The username can only contain alphanumeric characters, -, and _.";
+                    break;
+                  case "username taken":
+                    messageText = "The username cannot be left blank.";
+                    break;
+                }
+                
+                infoErrorMessage.text(messageText);
+              }
             }
           }
 
@@ -743,6 +778,11 @@ fetch("/api/user")
           // save button click
           function saveUserInfoClick(e) {
             e.preventDefault();
+
+            // check if enabled
+            if ($(e.target).hasClass("save-user-info-disabled")) {
+              return;
+            }
 
             // start loading animation
             const loadingAnimation = new LoadingAnimation($(e.target));

@@ -1,0 +1,28 @@
+#left-panel {
+  width: 250px;
+  height: calc(100vh - 55px);
+  background: #23212c;
+  border-right: 1px solid #423d5c;
+  padding: 20px;
+}
+
+#admin-options {
+  width: 100%;
+  display: none;
+  justify-content: space-around;
+}
+
+#admin-options > span {
+  color: #757980;
+  cursor: pointer;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-right: 7px;
+  padding-left: 7px;
+  border-radius: 5px;
+  transition: background 500ms;
+}
+
+#admin-options > span:hover {
+  background: #322e48;
+}
