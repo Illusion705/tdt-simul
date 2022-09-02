@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 // schema
 const channelSchema = mongoose.Schema({
   name: String,
+  channelId: Number,
   order: Number,
   messages: {
     type: [Number],
@@ -16,6 +17,10 @@ const channelSchema = mongoose.Schema({
   canPost: {
     type: Number,
     default: 0
+  },
+  isDeleted: {
+    type: Boolean,
+    default: false
   }
 });
 

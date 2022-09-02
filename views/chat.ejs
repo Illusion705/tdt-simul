@@ -17,11 +17,131 @@
         <span id="add-section">+ Add Section</span>
         <span id="add-channel">+ Add Channel</span>
       </div>
+
+      <template id="section-template">
+        <div class="section">
+          <span class="section-arrow">▷</span>
+          <span class="section-name"></span>
+
+          <div class="section-channels"></div>
+        </div>
+      </template>
+
+      <template id="channel-template">
+        <div class="channel">
+          <span class="channel-name"></span>
+        </div>
+      </template>
+
+      <div id="sections"></div>
     </div>
 
-    <div id="new-section-form">
-      
-    </div>
+    <!-- new section -->
+    <form id="new-section-form-container">
+      <div id="new-section-form">
+        <h2 id="hide-new-section-form">X</h2>
+        
+        <h1>Add Section</h1>
+
+        <div>
+          <label for="section-form-name">Name: </label>
+          <input type="text" id="section-form-name" />
+        </div>
+  
+        <div id="section-form-authorization-options">
+          <div id="section-form-can-see-container">
+            <h3>View Options:</h3>
+            
+            <input id="section-form-can-see-everyone" type="radio" name="section-form-can-see" value="0" checked />
+            <label for="section-form-can-see-everyone">Everyone</label>
+            <br />
+            
+            <input id="section-form-can-see-administrators" type="radio" name="section-form-can-see" value="1" />
+            <label for="section-form-can-see-administrators">Administrators</label>
+            <br />
+
+            <div class="admin-level-2-setting">
+              <input id="section-form-can-see-admin-level-2" type="radio" name="section-form-can-see" value="2" />
+              <label for="section-form-can-see-admin-level-2">Admin Level 2</label>
+            </div>
+          </div>
+          <div id="section-form-can-post-container">
+            <h3>Post Options:</h3>
+            
+            <input id="section-form-can-post-everyone" type="radio" name="section-form-can-post" value="0" checked />
+            <label for="section-form-can-post-everyone">Everyone</label>
+            <br />
+            
+            <input id="section-form-can-post-administrators" type="radio" name="section-form-can-post" value="1" />
+            <label for="section-form-can-post-administrators">Administrators</label>
+            <br />
+
+            <div class="admin-level-2-setting">
+              <input id="section-form-can-post-admin-level-2" type="radio" name="section-form-can-post" value="2" />
+              <label for="section-form-can-post-admin-level-2">Admin Level 2</label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" id="create-section" class="button-disabled" disabled>Create Section</button>
+      </div>
+    </form>
+
+    <!-- new channel -->
+    <form id="new-channel-form-container">
+      <div id="new-channel-form">
+        <h2 id="hide-new-channel-form">X</h2>
+        
+        <h1>Add Channel</h1>
+
+        <div>
+          <label for="channel-form-name">Name: </label>
+          <input type="text" id="channel-form-name" />
+        </div>
+  
+        <div id="section-form-authorization-options">
+          <div id="section-form-can-see-container">
+            <h3>View Options:</h3>
+            
+            <input id="channel-form-can-see-everyone" type="radio" name="channel-form-can-see" value="0" checked />
+            <label for="channel-form-can-see-everyone">Everyone</label>
+            <br />
+            
+            <input id="channel-form-can-see-administrators" type="radio" name="channel-form-can-see" value="1" />
+            <label for="channel-form-can-see-administrators">Administrators</label>
+            <br />
+
+            <div class="admin-level-2-setting">
+              <input id="channel-form-can-see-admin-level-2" type="radio" name="channel-form-can-see" value="2" />
+              <label for="channel-form-can-see-admin-level-2">Admin Level 2</label>
+            </div>
+          </div>
+          <div id="channel-form-can-post-container">
+            <h3>Post Options:</h3>
+            
+            <input id="channel-form-can-post-everyone" type="radio" name="channel-form-can-post" value="0" checked />
+            <label for="channel-form-can-post-everyone">Everyone</label>
+            <br />
+            
+            <input id="channel-form-can-post-administrators" type="radio" name="channel-form-can-post" value="1" />
+            <label for="channel-form-can-post-administrators">Administrators</label>
+            <br />
+
+            <div class="admin-level-2-setting">
+              <input id="channel-form-can-post-admin-level-2" type="radio" name="channel-form-can-post" value="2" />
+              <label for="channel-form-can-post-admin-level-2">Admin Level 2</label>
+            </div>
+          </div>
+        </div>
+
+        <div id="new-channel-section-options-container">
+          <label for="new-channel-section-options" id="new-channel-section-options-label">Section: </label>
+          <select id="new-channel-section-options"></select>
+        </div>
+
+        <button type="submit" id="create-channel" class="button-disabled" disabled>Create Channel</button>
+      </div>
+    </form>
   </main>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

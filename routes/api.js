@@ -454,17 +454,22 @@ router.get("/users", (req, res) => {
 });
 
 router.post("/create_section", async (req, res) => {
-  if (req.isAuthenticated() && req.user.adminLevel === 2 && !req.user.isBanned && !req.user.isDeleted) {
+  if (req.isAuthenticated() && req.user.adminLevel === 2 && !req.user.isBanned && !req.user.isDeleted  && req.body.canSee <= req.user.adminLevel && req.body.canPost <= req.user.adminLevel) {
     if (typeof req.body.name === "string" && typeof req.body.canSee === "number" && typeof req.body.canPost === "number") {
-      const section = new Section({
+      const sectionData = {
         name: req.body.name,
+        sectionId: (await Section.collection.count()) + 1,
         canSee: req.body.canSee,
-        canPost: req.body.canPost
-      });
+        canPost: req.body.canPost,
+        channels: [],
+        order: (await Section.collection.count()) + 1
+      };
+      
+      const section = new Section(sectionData);
 
       await section.save();
 
-      res.json({ status: "success" });
+      res.json({ status: "success", section: sectionData });
     } else {
       res.json({ status: "failed", reason: "invalid data" });
     }
@@ -473,8 +478,96 @@ router.post("/create_section", async (req, res) => {
   }
 });
 
+router.get("/sections", async (req, res) => {
+  if (req.isAuthenticated() && req.user.verificationStatus === "verified" && !req.user.isBanned && !req.user.isDeleted) {
+    let filteredSections = [];
+    
+    await Section.find()
+      .then(sections => {
+        for (section of sections) {
+          if (req.user.adminLevel >= section.canSee && !section.isDeleted) {
+            filteredSections.push({
+              name: section.name,
+              id: section.sectionId,
+              channels: section.channels,
+              canSee: section.canSee,
+              canPost: section.canPost,
+              order: section.order
+            });
+          }
+        }
+      });
+    
+    res.json(filteredSections);
+  } else {
+    res.json({ message: "access denied" })
+  }
+});
+
 router.post("/create_channel", (req, res) => {
-  
+  if (req.isAuthenticated() && req.user.adminLevel === 2 && !req.user.isBanned && !req.user.isDeleted && req.body.canSee <= req.user.adminLevel && req.body.canPost <= req.user.adminLevel) {
+    if (typeof req.body.name === "string" && typeof req.body.canSee === "number" && typeof req.body.canPost === "number" && typeof req.body.section === "number") {
+      Section.findOne({ sectionId: req.body.section })
+        .then(async section => {
+          if (section.canSee <= req.user.adminLevel && section.canPost <= req.user.adminLevel) {          
+            // add channel to section
+            let sectionChannels = section.channels;
+            sectionChannels.push((await Channel.collection.count()) + 1);
+            section.channels = sectionChannels;
+            await section.save();
+
+            // create channel
+            const channelData = {
+              name: req.body.name,
+              channelId: (await Channel.collection.count()) + 1,
+              canSee: req.body.canSee,
+              canPost: req.body.canPost,
+              order: (await Channel.collection.count()) + 1
+            };
+            
+            const channel = new Channel(channelData);
+      
+            await channel.save();
+      
+            res.json({ status: "success", channel: channelData });
+          } else {
+            res.json({ status: "failed", reason: "action prohibited" });
+          }
+        })
+        .catch(() => {
+          res.json({ status: "failed", reason: "invalid data" });
+        });
+    } else {
+      res.json({ status: "failed", reason: "invalid data" });
+    }
+  } else {
+    res.json({ status: "failed", reason: "action prohibited" });
+  }
+});
+
+router.get("/channels", async (req, res) => {
+  if (req.isAuthenticated() && req.user.verificationStatus === "verified" && !req.user.isBanned && !req.user.isDeleted) {
+    let filteredChannels = [];
+    
+    await Channel.find()
+      .then(channels => {
+        for (channel of channels) {
+          if (req.user.adminLevel >= channel.canSee && !channel.isDeleted) {
+            filteredChannels.push({
+              name: channel.name,
+              id: channel.channelId,
+              canSee: channel.canSee,
+              canPost: channel.canPost,
+              order: channel.order
+            });
+          }
+        }
+      });
+    
+    res.json(filteredChannels);
+  } else {
+    res.json({ message: "access denied" })
+  }
 });
 
 // export router
