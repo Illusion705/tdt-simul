@@ -281,7 +281,7 @@ async function checkUsernameAvailable(username) {
   let returnValue;
   
   await fetch("/api/username_status/" + username)
-    .then(data => data.json())
+    .then(response => response.json())
     .then(data => {
       if (data.status === "taken") {
         returnValue = false;
@@ -297,6 +297,11 @@ async function verifyUsername(username, takenExceptions = []) {
   // check username inputted
   if (!username) {
     return "no username";
+  }
+
+  // check username appropriate
+  if (await textFilter(username)) {
+    return "username not allowed";
   }
 
   // check username length
@@ -331,4 +336,17 @@ function verifyPassword(password, passwordConfirmation = null) {
   }
 
   return "password valid";
+}
+
+// text filter
+async function textFilter(text) {
+  let isProfane;
+  
+  await fetch("/api/check_text?text=" + text)
+    .then(response => response.json())
+    .then(response => {
+      isProfane = response.isProfane;
+    });
+
+  return isProfane;
 }

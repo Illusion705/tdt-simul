@@ -57,6 +57,9 @@ registerUsername.blur(async () => {
     case "username taken":
       usernameWarning.text("username taken");
       break;
+    case "username not allowed":
+      usernameWarning.text("username not allowed");
+      break;
     case "invalid length":
       usernameWarning.text("username must be 3-20 characters");
       break;

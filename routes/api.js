@@ -1,5 +1,6 @@
 // dependencies
 const router = require("express").Router();
+const profanityWords = require("leo-profanity");
   
 const verifyUserData = require("../lib/verify-user-data");
 const createAlert = require("../lib/create-alert");
@@ -13,6 +14,19 @@ const Message = require("../models/Message");
 const Section = require("../models/Section");
 
 // routes
+router.get("/check_text", (req, res) => {
+  const badWords = profanityWords.getDictionary();
+
+  for (let i = 0; i < badWords.length; i++) {
+    if (req.query.text.toLowerCase().includes(badWords[i] + " ")) {
+      res.json({ isProfane: true });
+      return;
+    }
+  }
+
+  res.json({ isProfane: false });
+});
+
 router.get("/username_status/:username", (req, res) => {
   User.findOne({ username: req.params.username.toLowerCase() })
     .then(user => {
