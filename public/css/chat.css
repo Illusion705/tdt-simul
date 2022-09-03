@@ -145,3 +145,34 @@ main {
 #new-channel-section-options:focus {
   outline: none;
 }
+
+.channel {
+  margin-left: 20px;
+  margin-top: 5px;
+  padding: 5px;
+  width: 200px;
+  border-radius: 5px;
+  transition: background 500ms;
+  cursor: pointer;
+}
+
+.channel:hover {
+  background: #322e48;
+}
+
+.selected-channel {
+  background: #322e48;
+}
+
+#sections {
+  overflow-y: scroll;
+}
+
+#sections::-webkit-scrollbar {
+  width: 10px;
+}
+
+#sections::-webkit-scrollbar-thumb {
+  background: #322e48;
+  border-radius: 10px;
+}

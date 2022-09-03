@@ -14,6 +14,9 @@
   
       adminLevel = data.adminLevel;
     });
+
+  // set height of sections
+  $("#sections").outerHeight($(window).outerHeight() - $("#admin-options").outerHeight() - $("header").outerHeight() - 40 + "px");
   
   // sections
   let sections = [];
@@ -26,13 +29,26 @@
     });
   }
 
+  // select channel function
+  let selectedChannel;
+  function selectChannel(id = selectedChannel) {
+    $("#channelId" + selectedChannel).removeClass("selected-channel");
+    $("#channelId" + id).addClass("selected-channel");
+    selectedChannel = id;
+  }
+
   // create channels on screen
   function createChannel(name, id, sectionId) {
     const channel = $($("#channel-template").html());
     channel.find(".channel-name").text(name);
   
     channel.attr("draggable", adminLevel > 0 ? true : false);
-    channel.attr("id", "sectionId" + id);
+    channel.attr("id", "channelId" + id);
+
+    // channel selection
+    channel.click(() => {
+      selectChannel(id); 
+    });
   
     $("#sectionId" + sectionId + " > .section-channels").append(channel);
   }
@@ -53,6 +69,8 @@
     for (channel of filteredChannels) {
       createChannel(channel.name, channel.id, sectionId);
     }
+
+    selectChannel();
   }
   
   // create section on screen
@@ -78,7 +96,7 @@
   }
   
   // get sections
-  fetch("/api/sections")
+  await fetch("/api/sections")
     .then(response => response.json())
     .then(sectionsData => {
       sections = sectionsData;
@@ -86,7 +104,7 @@
     });
 
   // get channels
-  fetch("/api/channels")
+  await fetch("/api/channels")
     .then(response => response.json())
     .then(channelsData => {
       channels = channelsData;
@@ -139,8 +157,7 @@
       method: "POST",
       body: JSON.stringify({
         name: $("#section-form-name").val(),
-        canSee: parseInt($("input[name=\"section-form-can-see\"]:checked").val()),
-        canPost: parseInt($("input[name=\"section-form-can-post\"]:checked").val())
+        canSee: parseInt($("input[name=\"section-form-can-see\"]:checked").val())
       }),
       headers: {
         "Content-Type": "application/json"
@@ -304,4 +321,7 @@
       }
     });
   });
+
+  // select first channel
+  selectChannel(sections[0].channels[0]);
 })();

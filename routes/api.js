@@ -454,13 +454,12 @@ router.get("/users", (req, res) => {
 });
 
 router.post("/create_section", async (req, res) => {
-  if (req.isAuthenticated() && req.user.adminLevel === 2 && !req.user.isBanned && !req.user.isDeleted  && req.body.canSee <= req.user.adminLevel && req.body.canPost <= req.user.adminLevel) {
-    if (typeof req.body.name === "string" && typeof req.body.canSee === "number" && typeof req.body.canPost === "number") {
+  if (req.isAuthenticated() && req.user.adminLevel === 2 && !req.user.isBanned && !req.user.isDeleted) {
+    if (typeof req.body.name === "string" && typeof req.body.canSee === "number") {
       const sectionData = {
         name: req.body.name,
         sectionId: (await Section.collection.count()) + 1,
         canSee: req.body.canSee,
-        canPost: req.body.canPost,
         channels: [],
         order: (await Section.collection.count()) + 1
       };
@@ -491,7 +490,6 @@ router.get("/sections", async (req, res) => {
               id: section.sectionId,
               channels: section.channels,
               canSee: section.canSee,
-              canPost: section.canPost,
               order: section.order
             });
           }
@@ -509,7 +507,7 @@ router.post("/create_channel", (req, res) => {
     if (typeof req.body.name === "string" && typeof req.body.canSee === "number" && typeof req.body.canPost === "number" && typeof req.body.section === "number") {
       Section.findOne({ sectionId: req.body.section })
         .then(async section => {
-          if (section.canSee <= req.user.adminLevel && section.canPost <= req.user.adminLevel) {          
+          if (section.canSee <= req.user.adminLevel) {          
             // add channel to section
             let sectionChannels = section.channels;
             sectionChannels.push((await Channel.collection.count()) + 1);
